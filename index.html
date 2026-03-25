@@ -1,985 +1,507 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>Nancy Nathan</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,600;0,700;1,500;1,700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --premium-dark:#0f172a;
-  --premium-blue:#1e293b;
-  --premium-gray:#f8fafc;
-  --premium-border:#334155;
-  --gold:#c8a456;
-  --gold2:#e8c87a;
-  --white:#ffffff;
-  --txt-dark:#1e293b;
-  --txt-light:#64748b;
-  --txt-white:#f1f5f9;
-}
-html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
-body{
-  font-family:'Jost',sans-serif;
-  color:var(--txt-dark);background:var(--white);
-  overflow-x:hidden;
-  cursor:none;
-}
-/* custom cursor – desktop only */
-#cursor,#cursor-follow{
-  position:fixed;pointer-events:none;z-index:9999;border-radius:50%;
-  transition:transform .1s;will-change:transform;
-}
-#cursor{width:8px;height:8px;background:var(--gold);top:-4px;left:-4px}
-#cursor-follow{
-  width:32px;height:32px;border:1px solid rgba(200,164,86,.5);
-  top:-16px;left:-16px;
-  transition:transform .12s,width .3s,height .3s,border-color .3s;
-}
-@media(hover:none){#cursor,#cursor-follow{display:none}body{cursor:auto}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nancy Nathan | Advocate & Legal Consultant</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        premium: {
+                            dark: '#0f172a',
+                            blue: '#1e293b',
+                            gold: '#c8a456',
+                            goldLight: '#e8c87a',
+                            border: '#334155',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #c8a456; border-radius: 4px; }
+        
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up { animation: fadeUp 0.8s ease-out forwards; }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
 
-/* ────────────── NAV ────────────── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:500;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 1.2rem;height:70px;
-  background:rgba(15,23,42,.92);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--premium-border);
-}
-.nav-logo{
-  font-family:'Cormorant',serif;font-size:1.25rem;font-weight:700;
-  color:var(--white);letter-spacing:.03em;text-decoration:none;
-}
-.nav-logo span{color:var(--gold);font-style:italic}
-.nav-right{display:flex;align-items:center;gap:.8rem}
-.nav-book{
-  background:var(--premium-blue);color:var(--white);
-  font-size:.75rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
-  padding:.7rem 1.6rem;border-radius:10px;text-decoration:none;
-  border:1px solid var(--premium-border);
-  transition:all .3s ease;
-}
-.nav-book:hover{background:var(--white);color:var(--premium-dark);transform:translateY(-1px)}
-/* hamburger */
-.ham{
-  width:36px;height:36px;border:1px solid var(--border);border-radius:8px;
-  background:transparent;cursor:pointer;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:5px;padding:0;
-  transition:border-color .2s;
-}
-.ham span{display:block;width:16px;height:1.5px;background:var(--white);transition:all .3s;border-radius:2px}
-.ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
-.ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
-.ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
-/* mobile drawer */
-.drawer{
-  position:fixed;top:60px;left:0;right:0;bottom:0;z-index:400;
-  background:rgba(6,14,26,.98);backdrop-filter:blur(20px);
-  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2rem;
-  transform:translateX(100%);transition:transform .45s cubic-bezier(.77,0,.175,1);
-}
-.drawer.open{transform:translateX(0)}
-.drawer a{
-  font-family:'Cormorant',serif;font-size:1.6rem;font-weight:700;font-style:italic;
-  color:rgba(255,255,255,.7);text-decoration:none;letter-spacing:.02em;
-  transition:color .2s;
-}
-.drawer a:hover{color:var(--gold)}
-.drawer-rule{width:40px;height:1px;background:var(--border)}
-
-/* ────────────── HERO ────────────── */
-#hero{
-  min-height:100dvh;
-  background:var(--premium-dark);
-  position:relative;overflow:hidden;
-  display:flex;flex-direction:column;justify-content:center;
-  padding:90px 1.4rem 3rem;
-}
-/* animated particle canvas */
-#particles{position:absolute;inset:0;opacity:.45}
-/* diagonal gold slash */
-.slash{
-  position:absolute;
-  width:1px;height:65vh;
-  background:linear-gradient(to bottom,transparent,rgba(200,164,86,.45),transparent);
-  right:18%;top:50%;transform:translateY(-50%) rotate(15deg);
-  pointer-events:none;
-}
-.slash2{
-  position:absolute;
-  width:1px;height:40vh;
-  background:linear-gradient(to bottom,transparent,rgba(200,164,86,.2),transparent);
-  right:22%;top:50%;transform:translateY(-50%) rotate(15deg);
-  pointer-events:none;
-}
-.hero-content{position:relative;z-index:2;max-width:520px}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:.5rem;
-  border:1px solid var(--border);
-  color:var(--gold);font-size:.68rem;font-weight:500;letter-spacing:.18em;
-  text-transform:uppercase;padding:.38rem 1rem;border-radius:40px;
-  margin-bottom:1.8rem;
-  opacity:0;animation:fadeUp .6s .2s forwards;
-}
-.hero-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
-.hero-name{
-  font-family:'Cormorant',serif;
-  font-size:clamp(3.4rem,14vw,5.5rem);
-  font-weight:700;color:var(--white);line-height:1;
-  opacity:0;animation:fadeUp .7s .32s forwards;
-}
-.hero-name em{font-style:italic;color:var(--gold);display:block}
-.hero-role{
-  font-size:.9rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;
-  color:var(--gold);margin-top:1.2rem;
-  opacity:0;animation:fadeUp .7s .44s forwards;
-}
-.hero-divider{
-  display:flex;align-items:center;gap:1rem;margin:1.8rem 0;
-  opacity:0;animation:fadeUp .6s .52s forwards;
-}
-.hero-divider::before{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--gold),transparent);max-width:60px}
-.hero-divider-text{font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.15em;text-transform:uppercase;font-weight:500}
-.hero-desc{
-  color:rgba(255,255,255,.7);font-size:1.05rem;line-height:1.75;
-  opacity:0;animation:fadeUp .7s .6s forwards;
-  max-width:580px;
-}
-.hero-cta{
-  display:flex;flex-direction:column;gap:.85rem;margin-top:2.2rem;
-  opacity:0;animation:fadeUp .7s .7s forwards;
-}
-.btn-primary, .btn-secondary{
-  display:inline-flex;align-items:center;justify-content:center;gap:.7rem;
-  padding:1.1rem 2.2rem;border-radius:10px;
-  font-size:.9rem;font-weight:600;letter-spacing:.03em;
-  text-transform:uppercase;text-decoration:none;
-  transition:all .3s cubic-bezier(.4,0,.2,1);
-  cursor:pointer;border:none;
-}
-.btn-primary{
-  background:var(--premium-blue);
-  color:var(--white);
-  border:1px solid var(--premium-border);
-  position:relative;overflow:hidden;
-}
-.btn-primary:hover{background:var(--white);color:var(--premium-dark);transform:translateY(-3px);box-shadow:0 15px 30px rgba(0,0,0,.3)}
-.btn-primary:active{transform:scale(.97)}
-
-.btn-secondary{
-  border:1px solid rgba(255,255,255,.2);
-  color:var(--white);
-  background:transparent;
-}
-.btn-secondary:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px)}
-
-.hero-socials{
-  display:flex;gap:1.2rem;margin-top:2.5rem;
-  opacity:0;animation:fadeUp .7s .8s forwards;
-}
-.hero-socials a{
-  display:flex;align-items:center;justify-content:center;
-  width:40px;height:40px;border-radius:10px;
-  background:rgba(255,255,255,.05);border:1px solid var(--premium-border);
-  color:rgba(255,255,255,.6);transition:all .3s ease;
-  text-decoration:none;
-}
-.hero-socials a:hover{background:var(--white);color:var(--premium-dark);transform:translateY(-3px)}
-.hero-socials svg{width:20px;height:20px;stroke-width:2px}
-/* floating scroll pill */
-.scroll-pill{
-  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:.5rem;
-  color:rgba(255,255,255,.25);font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;
-  z-index:2;
-}
-.scroll-line{
-  width:1px;height:40px;
-  background:linear-gradient(to bottom,rgba(200,164,86,.5),transparent);
-  animation:scrollDrop 1.8s ease-in-out infinite;
-}
-@keyframes scrollDrop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-
-/* ────────────── TRUST BAR ────────────── */
-#trust{
-  background:var(--premium-blue);
-  padding:3rem 1.4rem;
-  border-bottom:1px solid var(--premium-border);
-}
-.trust-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
-  max-width:1100px;margin:0 auto;
-}
-.trust-item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.5rem}
-.trust-num-wrap{display:flex;align-items:baseline;justify-content:center;gap:2px}
-.trust-num{font-family:'Cormorant',serif;font-size:2.8rem;font-weight:700;color:var(--white);line-height:1}
-.trust-sym{font-family:'Cormorant',serif;font-size:1.5rem;font-weight:700;color:var(--gold);line-height:1}
-.trust-label{font-size:.75rem;color:rgba(255,255,255,.5);letter-spacing:.12em;text-transform:uppercase;font-weight:500}
-
-/* ────────────── ABOUT ────────────── */
-#about{background:var(--white);padding:7rem 1.4rem}
-.section-top{margin-bottom:3.5rem}
-.eyebrow{font-size:.75rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:.8rem}
-.section-h2{font-family:'Cormorant',serif;font-size:clamp(2.4rem,8vw,3.5rem);font-weight:700;color:var(--premium-dark);line-height:1.1}
-.section-rule{width:48px;height:2px;background:var(--gold);border-radius:2px;margin:1.5rem 0 2rem}
-.body-p{font-size:1.05rem;line-height:1.8;color:var(--txt-light);margin-bottom:1.5rem}
-/* accordion pillars */
-.pillar-list{display:flex;flex-direction:column;gap:.7rem;margin-top:1.8rem}
-.pillar-item{
-  background:var(--white);border:1px solid rgba(0,0,0,.06);
-  border-radius:14px;overflow:hidden;
-  transition:box-shadow .2s;
-}
-.pillar-item:hover{box-shadow:0 4px 20px rgba(0,0,0,.07)}
-.pillar-header{
-  display:flex;align-items:center;gap:.9rem;padding:1rem 1.1rem;
-  cursor:pointer;user-select:none;
-}
-.pillar-icon-wrap{
-  width:36px;height:36px;border-radius:10px;
-  background:linear-gradient(135deg,var(--gold),#b8903a);
-  display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;
-}
-.pillar-title{font-size:.92rem;font-weight:600;color:var(--premium-dark);flex:1}
-.pillar-arrow{
-  font-size:.7rem;color:var(--txt-light);transition:transform .3s;
-  border:1px solid rgba(0,0,0,.1);border-radius:6px;
-  width:24px;height:24px;display:flex;align-items:center;justify-content:center;
-}
-.pillar-item.open .pillar-arrow{transform:rotate(180deg);background:rgba(200,164,86,.1);border-color:var(--gold);color:var(--gold)}
-.pillar-body{
-  max-height:0;overflow:hidden;
-  transition:max-height .35s cubic-bezier(.4,0,.2,1),padding .3s;
-  padding:0 1.1rem;
-}
-.pillar-item.open .pillar-body{max-height:120px;padding:.2rem 1.1rem 1rem}
-.pillar-body p{font-size:.85rem;color:var(--txt-light);line-height:1.7}
-
-/* ────────────── PRACTICE ────────────── */
-#practice{background:var(--premium-gray);padding:7rem 1.4rem}
-.pa-scroll{
-  display:flex;gap:1rem;overflow-x:auto;
-  scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch;
-  padding-bottom:.5rem;margin:0 -1.4rem;padding:0 1.4rem .8rem;
-  scrollbar-width:none;
-}
-.pa-scroll::-webkit-scrollbar{display:none}
-.pa-card{
-  flex:0 0 88vw;max-width:320px;
-  scroll-snap-align:start;
-  background:var(--premium-blue);border-radius:12px;
-  padding:2.5rem 2rem;position:relative;overflow:hidden;
-  transition:all .3s ease;
-  border:1px solid var(--premium-border);
-}
-.pa-card:active{transform:scale(.97)}
-.pa-card-glow{
-  position:absolute;width:150px;height:150px;border-radius:50%;
-  background:radial-gradient(circle,rgba(200,164,86,.15) 0%,transparent 70%);
-  bottom:-30px;right:-30px;pointer-events:none;
-}
-.pa-num{
-  font-family:'Cormorant',serif;font-size:3.5rem;font-weight:700;
-  color:rgba(200,164,86,.12);line-height:1;
-}
-.pa-icon-wrap{
-  width:44px;height:44px;border-radius:12px;
-  border:1px solid var(--border);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.2rem;margin:1rem 0 .8rem;
-}
-.pa-name{font-family:'Cormorant',serif;font-size:1.35rem;font-weight:700;color:var(--white);margin-bottom:.5rem}
-.pa-desc{font-size:.8rem;color:rgba(255,255,255,.45);line-height:1.65}
-.pa-tag{
-  display:inline-block;margin-top:1.1rem;
-  font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--gold);border:1px solid var(--border);
-  padding:.25rem .7rem;border-radius:40px;
-}
-/* dots indicator */
-.pa-dots{display:flex;justify-content:center;gap:.5rem;margin-top:1.1rem}
-.pa-dot{
-  width:6px;height:6px;border-radius:3px;
-  background:rgba(0,0,0,.15);transition:width .3s,background .3s;
-}
-.pa-dot.active{width:20px;background:var(--gold)}
-
-/* ────────────── WHY ────────────── */
-#why{
-  background:var(--premium-dark);
-  padding:7rem 1.4rem;
-  position:relative;overflow:hidden;
-}
-#why::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(26,53,96,.6) 0%,transparent 70%);
-  pointer-events:none;
-}
-.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:2rem}
-.why-card{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:18px;padding:1.4rem 1.2rem;
-  position:relative;overflow:hidden;
-  transition:background .3s,border-color .3s,transform .2s;
-}
-.why-card::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
-  background:linear-gradient(to bottom,var(--gold),transparent);
-  transform:scaleY(0);transform-origin:top;
-  transition:transform .4s ease;
-}
-.why-card:hover,.why-card:focus-within{
-  background:rgba(200,164,86,.07);
-  border-color:rgba(200,164,86,.2);
-  transform:translateY(-3px);
-}
-.why-card:hover::before{transform:scaleY(1)}
-.why-icon{font-size:1.3rem;margin-bottom:.7rem}
-.why-title{font-size:.9rem;font-weight:600;color:var(--white);margin-bottom:.4rem;line-height:1.3}
-.why-text{font-size:.75rem;color:rgba(255,255,255,.38);line-height:1.65}
-
-/* ────────────── TESTIMONIAL ────────────── */
-#testimonial{
-  background:var(--premium-gray);padding:7rem 1.4rem;
-  position:relative;overflow:hidden;
-}
-.quote-mark{
-  font-family:'Cormorant',serif;font-size:8rem;font-weight:700;
-  color:rgba(200,164,86,.12);line-height:.7;
-  position:absolute;top:1.5rem;left:1rem;
-  pointer-events:none;user-select:none;
-}
-.quote-text{
-  font-family:'Cormorant',serif;font-size:clamp(1.3rem,5vw,1.7rem);
-  font-style:italic;font-weight:600;
-  color:var(--premium-dark);line-height:1.5;
-  position:relative;z-index:1;padding-top:2rem;
-}
-.quote-author{margin-top:1.5rem;display:flex;align-items:center;gap:.9rem}
-.quote-avatar{
-  width:42px;height:42px;border-radius:50%;
-  background:linear-gradient(135deg,var(--gold),#b8903a);
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Cormorant',serif;font-size:1.1rem;font-weight:700;color:var(--white);
-  flex-shrink:0;
-}
-.quote-name{font-size:.88rem;font-weight:600;color:var(--premium-dark)}
-.quote-role{font-size:.75rem;color:var(--txt-light);margin-top:.1rem}
-
-/* ────────────── CONTACT ────────────── */
-#contact{background:var(--premium-dark);padding:7rem 1.4rem}
-#contact .eyebrow{color:var(--gold)}
-#contact .section-h2{color:var(--white)}
-#contact .section-rule{background:var(--gold)}
-.contact-cards{display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:3rem}
-.cc{
-  display:flex;align-items:center;gap:1rem;
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-  border-radius:16px;padding:1.1rem 1.2rem;
-  text-decoration:none;
-  transition:background .2s,border-color .2s,transform .15s;
-}
-.cc:hover,.cc:active{
-  background:rgba(200,164,86,.08);border-color:rgba(200,164,86,.25);
-  transform:translateX(4px);
-}
-.cc-icon{
-  width:42px;height:42px;border-radius:12px;
-  background:linear-gradient(135deg,var(--gold),#b8903a);
-  display:flex;align-items:center;justify-content:center;
-  font-size:1rem;flex-shrink:0;
-}
-.cc-label{font-size:.68rem;color:rgba(255,255,255,.35);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.2rem}
-.cc-val{font-size:.92rem;font-weight:500;color:var(--white)}
-.cc-arrow{margin-left:auto;color:rgba(255,255,255,.25);font-size:.9rem;transition:transform .2s}
-.cc:hover .cc-arrow{transform:translateX(3px);color:var(--gold)}
-/* cta box */
-.cta-final{
-  background:linear-gradient(135deg,rgba(200,164,86,.12),rgba(200,164,86,.04));
-  border:1px solid rgba(200,164,86,.2);
-  border-radius:20px;padding:2rem 1.5rem;text-align:center;
-}
-.cta-final-text{font-size:.88rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:1.5rem}
-.cta-final-h{
-  font-family:'Cormorant',serif;font-size:1.6rem;font-weight:700;font-style:italic;
-  color:var(--white);margin-bottom:.5rem;
-}
-
-/* ────────────── FOOTER ────────────── */
-footer{
-  background:var(--premium-dark);padding:4rem 1.4rem;
-  text-align:center;border-top:1px solid var(--premium-border);
-}
-.footer-logo{
-  font-family:'Cormorant',serif;font-size:1.8rem;font-weight:700;
-  color:var(--white);margin-bottom:1rem;
-}
-.footer-logo span{color:var(--gold);font-style:italic}
-.footer-copy{font-size:.8rem;color:rgba(255,255,255,.4);letter-spacing:.04em}
-.footer-socials{display:flex;justify-content:center;gap:1rem;margin-bottom:2rem}
-.footer-socials a{
-  display:flex;align-items:center;justify-content:center;
-  width:36px;height:36px;border-radius:8px;
-  background:var(--premium-blue);border:1px solid var(--premium-border);
-  color:rgba(255,255,255,.5);transition:all .3s ease;
-}
-.footer-socials a:hover{background:var(--white);color:var(--premium-dark);transform:translateY(-3px)}
-.footer-socials svg{width:18px;height:18px;stroke-width:2px}
-
-/* ────────────── SCROLL REVEAL ────────────── */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s,transform .65s}
-.reveal.visible{opacity:1;transform:none}
-.reveal-d1{transition-delay:.08s}
-.reveal-d2{transition-delay:.16s}
-.reveal-d3{transition-delay:.24s}
-.reveal-d4{transition-delay:.32s}
-
-/* ────────────── KEYFRAMES ────────────── */
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-/* ────────────── DESKTOP TWEAKS ────────────── */
-@media(min-width:640px){
-  nav{padding:0 2.5rem;height:68px}
-  .ham{display:none}
-  .desktop-links{display:flex;gap:2rem;list-style:none}
-  .desktop-links a{color:rgba(255,255,255,.6);text-decoration:none;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
-  .desktop-links a:hover{color:var(--gold)}
-  #hero{padding:110px 3rem 3rem;align-items:center}
-  .hero-content{max-width:560px}
-  .hero-cta{flex-direction:row}
-  #trust{padding:4rem 3rem}
-  .trust-grid{max-width:1100px;grid-template-columns:repeat(3,1fr)}
-  #about,#practice,#why,#testimonial,#contact{padding-left:1.4rem;padding-right:1.4rem}
-  .max-container{max-width:1100px;margin:0 auto;padding:0 1.4rem}
-  .pa-scroll{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:1.5rem;
-    margin:0;
-    padding:0;
-    overflow-x:visible;
-  }
-  .pa-card{
-    flex:none;
-    max-width:none;
-    margin:0;
-  }
-  .pa-dots{display:none}
-  .why-grid{grid-template-columns:repeat(4,1fr)}
-}
-@media(min-width:1024px){
-  .pa-scroll{grid-template-columns:repeat(4,1fr)}
-  .about-2col{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
-}
-
-/* ────────────── TO TOP BUTTON ────────────── */
-#to-top{
-  position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;
-  width:42px;height:42px;border-radius:10px;
-  background:var(--premium-blue);backdrop-filter:blur(10px);
-  -webkit-backdrop-filter:blur(10px);
-  border:1px solid var(--premium-border);color:var(--white);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;opacity:0;visibility:hidden;
-  transition:all .35s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 8px 24px rgba(0,0,0,.3);
-}
-#to-top.show{opacity:1;visibility:visible;transform:translateY(0)}
-#to-top:not(.show){transform:translateY(15px)}
-#to-top:hover{background:var(--gold);color:var(--ink);border-color:var(--gold2);transform:translateY(-3px)}
-#to-top:active{transform:scale(.92)}
-@media(min-width:640px){#to-top{bottom:2rem;right:2rem;width:48px;height:48px}}
-</style>
+        /* Go to Top Button Styles */
+        #go-to-top {
+            transition: all 0.3s ease;
+        }
+        #go-to-top.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+    </style>
 </head>
-<body>
+<body class="bg-premium-dark text-slate-100 font-sans selection:bg-premium-gold selection:text-premium-dark overflow-x-hidden">
 
-<!-- CUSTOM CURSOR -->
-<div id="cursor"></div>
-<div id="cursor-follow"></div>
+    <!-- Header / Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-premium-dark/90 backdrop-blur-lg border-b border-premium-border">
+        <nav class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="text-2xl font-serif font-bold tracking-tight">
+                Nancy <span class="text-premium-gold italic font-medium">Nathan</span>
+            </a>
+            
+            <ul class="hidden md:flex space-x-8 text-sm font-medium tracking-wide uppercase">
+                <li><a href="#about" class="hover:text-premium-gold transition">About</a></li>
+                <li><a href="#practice" class="hover:text-premium-gold transition">Practice Areas</a></li>
+                <li><a href="#why-me" class="hover:text-premium-gold transition">Why Choose Me</a></li>
+                <li><button onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})" class="hover:text-premium-gold transition">Contact</button></li>
+            </ul>
 
-<!-- TO TOP -->
-<button id="to-top" aria-label="Scroll to top">
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
-</button>
+            <div class="flex items-center space-x-4">
+                <a href="#contact" class="hidden sm:inline-block px-5 py-2.5 bg-premium-gold text-premium-dark font-bold rounded hover:bg-premium-goldLight transition duration-300 uppercase text-xs tracking-widest shadow-lg shadow-premium-gold/20">
+                    Book Consultation
+                </a>
+                <button class="md:hidden text-premium-gold" id="menu-toggle">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-premium-dark border-b border-premium-border px-6 py-8">
+            <ul class="flex flex-col space-y-6 text-lg font-serif">
+                <li><a href="#about" class="block hover:text-premium-gold">About</a></li>
+                <li><a href="#practice" class="block hover:text-premium-gold">Practice Areas</a></li>
+                <li><a href="#why-me" class="block hover:text-premium-gold">Why Choose Me</a></li>
+                <li><a href="#contact" class="block hover:text-premium-gold">Contact</a></li>
+            </ul>
+        </div>
+    </header>
 
-<!-- NAV -->
-<nav>
-  <a href="#" class="nav-logo">Nancy <span>Nathan</span></a>
-  <ul class="desktop-links" id="dlinks" style="display:none">
-    <li><a href="#about">About</a></li>
-    <li><a href="#practice">Practice</a></li>
-    <li><a href="#why">Why Me</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <div class="nav-right">
-    <a href="#contact" class="nav-book">Book Now</a>
-    <button class="ham" id="ham" aria-label="Menu">
-      <span></span><span></span><span></span>
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+        <!-- Background Overlay with Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="lawyer_hero_background_1774413574004.png" alt="Nancy Nathan Advocate Background" class="w-full h-full object-cover brightness-[0.4]">
+            <div class="absolute inset-0 bg-gradient-to-r from-premium-dark via-premium-dark/80 to-transparent"></div>
+        </div>
+
+        <div class="container mx-auto px-6 z-10 grid md:grid-cols-2 gap-12 items-center">
+            <div class="max-w-2xl animate-fade-up">
+                <div class="inline-flex items-center space-x-2 px-3 py-1 mb-6 rounded-full border border-premium-gold/30 bg-premium-gold/10 text-premium-gold text-xs font-semibold tracking-widest uppercase">
+                    <span class="w-2 h-2 rounded-full bg-premium-gold animate-pulse"></span>
+                    <span>Available for Consultation</span>
+                </div>
+                <h1 class="text-6xl md:text-8xl font-serif font-bold text-white mb-4 leading-tight">
+                    Nancy <span class="italic text-premium-gold">Nathan</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-premium-gold font-medium mb-6 tracking-wide uppercase">
+                    Advocate & Legal Consultant
+                </p>
+                <div class="w-20 h-1 bg-premium-gold mb-8"></div>
+                <h2 class="text-2xl md:text-3xl font-serif italic text-slate-300 mb-8 leading-relaxed">
+                    Protecting your rights with absolute integrity and expert strategic counsel.
+                </h2>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#contact" class="px-8 py-4 bg-premium-gold text-premium-dark font-bold rounded-lg hover:bg-premium-goldLight transform hover:-translate-y-1 transition duration-300 text-center uppercase tracking-widest shadow-xl shadow-premium-gold/20">
+                        Book Consultation
+                    </a>
+                    <a href="tel:+91XXXXXXXXXX" class="px-8 py-4 border border-premium-gold text-premium-gold font-bold rounded-lg hover:bg-premium-gold hover:text-premium-dark transform hover:-translate-y-1 transition duration-300 text-center uppercase tracking-widest">
+                        Call Now
+                    </a>
+                </div>
+                <div class="mt-12 flex items-center space-x-8 text-slate-400">
+                    <a href="https://www.linkedin.com/in/nancy-nathan-4397b9260" target="_blank" class="hover:text-premium-gold transition transform hover:scale-110">
+                        <i data-lucide="linkedin" class="w-6 h-6"></i>
+                    </a>
+                    <a href="https://www.youtube.com/channel/UCtkzPdYs10mUFBvweqpQWmQ" target="_blank" class="hover:text-premium-gold transition transform hover:scale-110">
+                        <i data-lucide="youtube" class="w-6 h-6"></i>
+                    </a>
+                    <a href="https://www.instagram.com/advocate.nancy_nathan/" target="_blank" class="hover:text-premium-gold transition transform hover:scale-110">
+                        <i data-lucide="instagram" class="w-6 h-6"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="hidden md:block relative animate-fade-up delay-200">
+                <!-- Abstract Design Element -->
+                <div class="absolute -top-10 -right-10 w-64 h-64 bg-premium-gold/10 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-10 -left-10 w-64 h-64 bg-premium-gold/5 rounded-full blur-3xl"></div>
+            </div>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-2 opacity-50 animate-bounce">
+            <span class="text-[10px] tracking-[0.3em] uppercase text-premium-gold">Explore</span>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-premium-gold"></i>
+        </div>
+    </section>
+
+    <!-- Trust Stats Section -->
+    <section class="bg-premium-blue border-y border-premium-border py-16">
+        <div class="container mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div class="space-y-2">
+                <p class="text-4xl md:text-5xl font-serif font-bold text-white">10<span class="text-premium-gold">+</span></p>
+                <p class="text-xs tracking-widest uppercase text-slate-400">Years Experience</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-4xl md:text-5xl font-serif font-bold text-white">500<span class="text-premium-gold">+</span></p>
+                <p class="text-xs tracking-widest uppercase text-slate-400">Cases Handled</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-4xl md:text-5xl font-serif font-bold text-white">100<span class="text-premium-gold">%</span></p>
+                <p class="text-xs tracking-widest uppercase text-slate-400">Confidentiality</p>
+            </div>
+            <div class="space-y-2">
+                <p class="text-4xl md:text-5xl font-serif font-bold text-white">24<span class="text-premium-gold">/</span>7</p>
+                <p class="text-xs tracking-widest uppercase text-slate-400">Legal Support</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-white text-slate-900 overflow-hidden">
+        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
+            <div class="relative group">
+                <div class="absolute -inset-4 bg-premium-gold/20 rounded-2xl transform rotate-3 transition group-hover:rotate-0 duration-500"></div>
+                <img src="lawyer_portrait_premium_1774413616736.png" alt="Nancy Nathan Advocate" class="relative rounded-xl shadow-2xl grayscale hover:grayscale-0 transition duration-700 w-full object-cover">
+                <div class="absolute bottom-10 -right-10 bg-premium-dark text-white p-8 rounded shadow-2xl hidden lg:block">
+                    <p class="text-3xl font-serif italic mb-2">"Dedication to Justice"</p>
+                    <p class="text-premium-gold text-sm tracking-widest uppercase">— Nancy Nathan</p>
+                </div>
+            </div>
+            <div>
+                <span class="text-premium-gold font-bold tracking-[0.2em] uppercase text-sm mb-4 block">Meet Your Advocate</span>
+                <h2 class="text-5xl font-serif font-bold mb-8 leading-tight">Expertise You Can <br><span class="italic text-slate-500">Relentlessly Trust</span></h2>
+                <div class="w-16 h-1.5 bg-premium-gold mb-10"></div>
+                <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                    I am Nancy Nathan, a practicing advocate specializing in International Law and Organization. With a deep commitment to the rule of law and a multi-jurisdictional approach, I provide high-value legal counsel that prioritizes your unique needs.
+                </p>
+                
+                <div class="space-y-6">
+                    <div class="flex items-start space-x-5 p-6 rounded-xl border border-slate-100 hover:border-premium-gold/30 hover:bg-premium-gold/5 transition duration-300">
+                        <div class="w-12 h-12 rounded-lg bg-premium-dark flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="shield-check" class="text-premium-gold w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-serif text-xl font-bold mb-1">Absolute Confidentiality</h4>
+                            <p class="text-slate-500 text-sm">Every case is treated with strict discretion and the highest ethical standards.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-5 p-6 rounded-xl border border-slate-100 hover:border-premium-gold/30 hover:bg-premium-gold/5 transition duration-300">
+                        <div class="w-12 h-12 rounded-lg bg-premium-dark flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="scale" class="text-premium-gold w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-serif text-xl font-bold mb-1">Practical Legal Solutions</h4>
+                            <p class="text-slate-500 text-sm">No legal jargon — just clear, actionable advice and strategies for resolution.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Practice Areas -->
+    <section id="practice" class="py-24 bg-slate-50 overflow-hidden">
+        <div class="container mx-auto px-6 text-center mb-16">
+            <span class="text-premium-gold font-bold tracking-[0.2em] uppercase text-sm mb-4 block">Our Expertise</span>
+            <h2 class="text-5xl font-serif font-bold text-slate-900">Comprehensive Solutions</h2>
+            <div class="w-20 h-1 bg-premium-gold mx-auto mt-6"></div>
+        </div>
+
+        <div class="container mx-auto px-6 grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Card 1 -->
+            <div class="group bg-white p-10 rounded-2xl shadow-xl hover:-translate-y-2 transition duration-500 border border-slate-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-0 bg-premium-gold group-hover:h-full transition-all duration-500"></div>
+                <div class="w-16 h-16 rounded-2xl bg-premium-dark/5 flex items-center justify-center mb-8 group-hover:bg-premium-dark transition duration-500">
+                    <i data-lucide="users" class="text-premium-dark w-8 h-8 group-hover:text-premium-gold transition duration-500"></i>
+                </div>
+                <h3 class="text-2xl font-serif font-bold text-slate-900 mb-4 tracking-tight">Civil Law</h3>
+                <p class="text-slate-500 leading-relaxed text-sm mb-6">Disputes, contracts, property matters, and civil litigation — handled with precision and absolute care.</p>
+                <span class="text-premium-gold font-bold text-xs tracking-widest uppercase border-b border-premium-gold/30 pb-1">Property & Contracts</span>
+            </div>
+            <!-- Card 2 -->
+            <div class="group bg-white p-10 rounded-2xl shadow-xl hover:-translate-y-2 transition duration-500 border border-slate-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-0 bg-premium-gold group-hover:h-full transition-all duration-500"></div>
+                <div class="w-16 h-16 rounded-2xl bg-premium-dark/5 flex items-center justify-center mb-8 group-hover:bg-premium-dark transition duration-500">
+                    <i data-lucide="gavel" class="text-premium-dark w-8 h-8 group-hover:text-premium-gold transition duration-500"></i>
+                </div>
+                <h3 class="text-2xl font-serif font-bold text-slate-900 mb-4 tracking-tight">Criminal Law</h3>
+                <p class="text-slate-500 leading-relaxed text-sm mb-6">Strong defense and unwavering representation in criminal matters at all court levels.</p>
+                <span class="text-premium-gold font-bold text-xs tracking-widest uppercase border-b border-premium-gold/30 pb-1">Defense & Advocacy</span>
+            </div>
+            <!-- Card 3 -->
+            <div class="group bg-white p-10 rounded-2xl shadow-xl hover:-translate-y-2 transition duration-500 border border-slate-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-0 bg-premium-gold group-hover:h-full transition-all duration-500"></div>
+                <div class="w-16 h-16 rounded-2xl bg-premium-dark/5 flex items-center justify-center mb-8 group-hover:bg-premium-dark transition duration-500">
+                    <i data-lucide="heart" class="text-premium-dark w-8 h-8 group-hover:text-premium-gold transition duration-500"></i>
+                </div>
+                <h3 class="text-2xl font-serif font-bold text-slate-900 mb-4 tracking-tight">Family Law</h3>
+                <p class="text-slate-500 leading-relaxed text-sm mb-6">Sensitive handling of divorce, custody, adoption, and all family-related legal matters.</p>
+                <span class="text-premium-gold font-bold text-xs tracking-widest uppercase border-b border-premium-gold/30 pb-1">Compassionate Counsel</span>
+            </div>
+            <!-- Card 4 -->
+            <div class="group bg-white p-10 rounded-2xl shadow-xl hover:-translate-y-2 transition duration-500 border border-slate-100 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-2 h-0 bg-premium-gold group-hover:h-full transition-all duration-500"></div>
+                <div class="w-16 h-16 rounded-2xl bg-premium-dark/5 flex items-center justify-center mb-8 group-hover:bg-premium-dark transition duration-500">
+                    <i data-lucide="message-square" class="text-premium-dark w-8 h-8 group-hover:text-premium-gold transition duration-500"></i>
+                </div>
+                <h3 class="text-2xl font-serif font-bold text-slate-900 mb-4 tracking-tight">Legal Advisory</h3>
+                <p class="text-slate-500 leading-relaxed text-sm mb-6">Clear, actionable legal advice tailored to your unique situation and specific needs.</p>
+                <span class="text-premium-gold font-bold text-xs tracking-widest uppercase border-b border-premium-gold/30 pb-1">Strategic Planning</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Me -->
+    <section id="why-me" class="py-24 bg-premium-dark relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-slate-50 to-transparent"></div>
+        <div class="container mx-auto px-6 grid md:grid-cols-3 gap-12 items-center">
+            <div class="md:col-span-1">
+                <span class="text-premium-gold font-bold tracking-[0.2em] uppercase text-sm mb-4 block">Superior Standards</span>
+                <h2 class="text-5xl font-serif font-bold text-white mb-8">Professionalism <br>& Integrity</h2>
+                <p class="text-slate-400 leading-relaxed mb-8">
+                    Success in legal matters requires more than just knowledge — it requires a deep commitment to excellence and a strategic mindset that sees beyond the obvious.
+                </p>
+                <div class="flex flex-col space-y-4">
+                    <div class="flex items-center space-x-3 text-slate-300">
+                        <i data-lucide="check-circle" class="text-premium-gold w-5 h-5"></i>
+                        <span class="font-medium">Direct Attorney Communication</span>
+                    </div>
+                    <div class="flex items-center space-x-3 text-slate-300">
+                        <i data-lucide="check-circle" class="text-premium-gold w-5 h-5"></i>
+                        <span class="font-medium">Transparent Fee Structure</span>
+                    </div>
+                    <div class="flex items-center space-x-3 text-slate-300">
+                        <i data-lucide="check-circle" class="text-premium-gold w-5 h-5"></i>
+                        <span class="font-medium">Relentless Courtroom Advocacy</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="md:col-span-2 grid sm:grid-cols-2 gap-6">
+                <!-- Feature 1 -->
+                <div class="p-8 bg-slate-900/50 backdrop-blur-sm border border-premium-border rounded-2xl hover:bg-slate-800 transition duration-300 group">
+                    <div class="text-premium-gold mb-6 group-hover:scale-110 transition duration-300">
+                        <i data-lucide="award" class="w-10 h-10"></i>
+                    </div>
+                    <h4 class="text-white font-serif text-xl font-bold mb-4 italic">Strategic Excellence</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">We develop creative and rigorous legal strategies designed for winning outcomes and long-term protection.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="p-8 bg-slate-900/50 backdrop-blur-sm border border-premium-border rounded-2xl hover:bg-slate-800 transition duration-300 group">
+                    <div class="text-premium-gold mb-6 group-hover:scale-110 transition duration-300">
+                        <i data-lucide="eye" class="w-10 h-10"></i>
+                    </div>
+                    <h4 class="text-white font-serif text-xl font-bold mb-4 italic">Focused Insight</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">Deep analysis into every detail, ensuring no stone is left unturned in your defense or consultation.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="p-8 bg-slate-900/50 backdrop-blur-sm border border-premium-border rounded-2xl hover:bg-slate-800 transition duration-300 group">
+                    <div class="text-premium-gold mb-6 group-hover:scale-110 transition duration-300">
+                        <i data-lucide="zap" class="w-10 h-10"></i>
+                    </div>
+                    <h4 class="text-white font-serif text-xl font-bold mb-4 italic">Prompt Response</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">Timely updates and swift action in urgent legal matters to stabilize and secure your position.</p>
+                </div>
+                <!-- Feature 4 -->
+                <div class="p-8 bg-slate-900/50 backdrop-blur-sm border border-premium-border rounded-2xl hover:bg-slate-800 transition duration-300 group">
+                    <div class="text-premium-gold mb-6 group-hover:scale-110 transition duration-300">
+                        <i data-lucide="globe" class="w-10 h-10"></i>
+                    </div>
+                    <h4 class="text-white font-serif text-xl font-bold mb-4 italic">Global Awareness</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">Specializing in international law helps provide a broader perspective for complex jurisdictional issues.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-6 max-w-4xl text-center">
+            <div class="mb-12">
+                <i data-lucide="quote" class="w-16 h-16 text-premium-gold/20 mx-auto"></i>
+            </div>
+            <p class="text-3xl md:text-4xl font-serif italic text-slate-800 mb-12 leading-relaxed">
+                "Nancy Nathan's guidance was a turning point. She explained everything clearly, fought for my case tirelessly, and the outcome exceeded my expectations. Her professionalism is truly unmatched."
+            </p>
+            <div class="flex items-center justify-center space-x-4">
+                <div class="w-16 h-16 rounded-full bg-premium-dark flex items-center justify-center text-premium-gold font-serif text-2xl font-bold">R</div>
+                <div class="text-left">
+                    <p class="font-bold text-slate-900 uppercase tracking-widest text-sm">Rajesh M.</p>
+                    <p class="text-slate-500 text-xs">Civil Law Engagement</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-premium-dark border-t border-premium-border overflow-x-hidden">
+        <div class="container mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-12 sm:gap-16 items-start">
+            <div>
+                <span class="text-premium-gold font-bold tracking-[0.2em] uppercase text-sm mb-4 block">Consultation</span>
+                <h2 class="text-3xl sm:text-5xl font-serif font-bold text-white mb-8 leading-tight">Secure Your <br>Future <span class="italic text-premium-gold">Today</span></h2>
+                <p class="text-slate-400 text-lg mb-12 leading-relaxed">
+                    Ready to protect your interests? Book a consultation today. I'll listen to your situation and provide the professional guidance you need.
+                </p>
+                
+                <div class="grid gap-4 sm:gap-6">
+                    <a href="tel:+91XXXXXXXXXX" class="group flex items-center space-x-4 sm:space-x-6 p-4 sm:p-6 rounded-2xl bg-slate-900/50 border border-premium-border hover:border-premium-gold transition duration-300">
+                        <div class="w-14 h-14 rounded-full bg-premium-gold/10 flex items-center justify-center text-premium-gold group-hover:bg-premium-gold group-hover:text-premium-dark transition duration-300">
+                            <i data-lucide="phone" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <p class="text-[9px] tracking-widest uppercase text-slate-500 mb-1">Call Now</p>
+                            <p class="text-white text-base sm:text-xl font-medium tracking-wide">+91 XXXXX XXXXX</p>
+                        </div>
+                    </a>
+                    <a href="mailto:nancynathan005@gmail.com" class="group flex items-center space-x-4 sm:space-x-6 p-4 sm:p-6 rounded-2xl bg-slate-900/50 border border-premium-border hover:border-premium-gold transition duration-300">
+                        <div class="w-14 h-14 rounded-full bg-premium-gold/10 flex items-center justify-center text-premium-gold group-hover:bg-premium-gold group-hover:text-premium-dark transition duration-300">
+                            <i data-lucide="mail" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <p class="text-[9px] tracking-widest uppercase text-slate-500 mb-1">Email Support</p>
+                            <p class="text-white text-base sm:text-xl font-medium tracking-wide">nancynathan005@gmail.com</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="bg-white p-5 sm:p-10 rounded-3xl shadow-xl w-full max-w-lg mx-auto md:max-w-full">
+                <h3 class="text-xl sm:text-2xl font-serif font-bold text-slate-900 mb-6 sm:mb-8 tracking-tight">Schedule an Appointment</h3>
+                <form class="space-y-6">
+                    <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                        <div class="space-y-1 sm:space-y-2">
+                            <label class="text-[9px] sm:text-[10px] tracking-widest bg-white z-10 font-bold uppercase text-slate-400">Full Name</label>
+                            <input type="text" placeholder="John Doe" class="w-full px-4 py-3 sm:px-5 sm:py-4 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:border-premium-gold focus:ring-1 focus:ring-premium-gold text-slate-900 transition text-sm sm:text-base">
+                        </div>
+                        <div class="space-y-1 sm:space-y-2">
+                            <label class="text-[9px] sm:text-[10px] tracking-widest font-bold uppercase text-slate-400">Email Address</label>
+                            <input type="email" placeholder="john@example.com" class="w-full px-4 py-3 sm:px-5 sm:py-4 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:border-premium-gold focus:ring-1 focus:ring-premium-gold text-slate-900 transition text-sm sm:text-base">
+                        </div>
+                    </div>
+                    <div class="space-y-1 sm:space-y-2">
+                        <label class="text-[9px] sm:text-[10px] tracking-widest font-bold uppercase text-slate-400">Legal Matter</label>
+                        <select class="w-full px-4 py-3 sm:px-5 sm:py-4 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:border-premium-gold focus:ring-1 focus:ring-premium-gold text-slate-900 transition appearance-none text-sm sm:text-base">
+                            <option>Civil Law</option>
+                            <option>Criminal Defense</option>
+                            <option>Family Law</option>
+                            <option>International Advisory</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1 sm:space-y-2">
+                        <label class="text-[9px] sm:text-[10px] tracking-widest font-bold uppercase text-slate-400">Your Message</label>
+                        <textarea rows="3" sm:rows="4" placeholder="Brief description..." class="w-full px-4 py-3 sm:px-5 sm:py-4 bg-slate-50 border border-slate-100 rounded-xl focus:outline-none focus:border-premium-gold focus:ring-1 focus:ring-premium-gold text-slate-900 transition text-sm sm:text-base"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-4 sm:py-5 bg-premium-dark text-white font-bold rounded-xl hover:bg-slate-800 transition duration-300 uppercase tracking-[0.15em] sm:tracking-[0.2em] shadow-xl shadow-slate-900/10 text-xs sm:text-sm">
+                        Request Consultation
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-premium-dark py-12 border-t border-premium-border">
+        <div class="container mx-auto px-6 flex flex-col items-center">
+            <a href="#" class="text-3xl font-serif font-bold tracking-tight mb-8">
+                Nancy <span class="text-premium-gold italic font-medium">Nathan</span>
+            </a>
+            <p class="text-slate-500 text-sm tracking-widest uppercase mb-8">Trusted · Professional · Integrity</p>
+            <div class="w-full max-w-lg h-px bg-premium-border mb-8"></div>
+            <div class="flex space-x-8 mb-12">
+                <a href="https://www.linkedin.com/in/nancy-nathan-4397b9260" target="_blank" class="text-premium-gold hover:text-white transition duration-300 transform hover:scale-110" aria-label="LinkedIn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+                <a href="https://www.instagram.com/advocate.nancy_nathan/" target="_blank" class="text-premium-gold hover:text-white transition duration-300 transform hover:scale-110" aria-label="Instagram">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                </a>
+                <a href="https://www.youtube.com/channel/UCtkzPdYs10mUFBvweqpQWmQ" target="_blank" class="text-premium-gold hover:text-white transition duration-300 transform hover:scale-110" aria-label="YouTube">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 2-2 58.38 58.38 0 0 1 15 0 2 2 0 0 1 2 2 24.12 24.12 0 0 1 0 10 2 2 0 0 1-2 2 58.38 58.38 0 0 1-15 0 2 2 0 0 1-2-2z"/><path d="m9.75 15.02 5.75-3.02-5.75-3.02z"/></svg>
+                </a>
+            </div>
+            <p class="text-slate-600 text-center text-[10px] tracking-widest uppercase">
+                &copy; 2024 Nancy Nathan. All Rights Reserved. Powered by jeevanantham M
+            </p>
+        </div>
+    </footer>
+
+    <!-- Go to Top Button -->
+    <button id="go-to-top" aria-label="Go to Top" class="fixed bottom-8 right-8 z-[100] p-3 bg-premium-gold text-premium-dark rounded-full shadow-2xl transition-all duration-300 opacity-0 invisible translate-y-10 hover:bg-premium-goldLight hover:-translate-y-1 active:scale-90">
+        <i data-lucide="chevron-up"></i>
     </button>
-  </div>
-</nav>
 
-<!-- DRAWER -->
-<div class="drawer" id="drawer">
-  <a href="#about"   onclick="closeDrawer()">About</a>
-  <div class="drawer-rule"></div>
-  <a href="#practice" onclick="closeDrawer()">Practice</a>
-  <div class="drawer-rule"></div>
-  <a href="#why"     onclick="closeDrawer()">Why Choose Me</a>
-  <div class="drawer-rule"></div>
-  <a href="#contact" onclick="closeDrawer()">Contact</a>
-</div>
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
 
-<!-- HERO -->
-<section id="hero">
-  <canvas id="particles"></canvas>
-  <div class="slash"></div>
-  <div class="slash2"></div>
-  <div class="hero-content">
-    <h1 class="hero-name">Nancy Nathan</h1>
-    <p class="hero-role">Advocate &amp; Legal Consultant</p>
-    <div class="hero-divider">
-      <span class="hero-divider-text">Trusted · Professional · Integrity</span>
-    </div>
-    <p class="hero-desc">Providing reliable legal services with a client-focused approach — from courtroom advocacy to strategic consultation.</p>
-    <div class="hero-cta">
-      <a href="#contact" class="btn-primary">
-        Book Consultation
-      </a>
-      <a href="tel:+91XXXXXXXXXX" class="btn-secondary">
-        Call Now
-      </a>
-    </div>
-    <div class="hero-socials">
-      <a href="https://www.linkedin.com/in/nancy-nathan-4397b9260" target="_blank" aria-label="LinkedIn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-      </a>
-      <a href="https://www.youtube.com/channel/UCtkzPdYs10mUFBvweqpQWmQ" target="_blank" aria-label="YouTube">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
-      </a>
-      <a href="https://www.instagram.com/advocate.nancy_nathan/" target="_blank" aria-label="Instagram">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-      </a>
-    </div>
-  </div>
-  <div class="scroll-pill">
-    <div class="scroll-line"></div>
-    <span>Scroll</span>
-  </div>
-</section>
+        // Close mobile menu on link click
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
 
-<!-- TRUST BAR -->
-<div id="trust">
-  <div class="trust-grid">
-    <div class="trust-item">
-      <div class="trust-num-wrap">
-        <span class="trust-num" data-count="10">0</span>
-        <span class="trust-sym">+</span>
-      </div>
-      <span class="trust-label">Yrs Experience</span>
-    </div>
-    <div class="trust-item">
-      <div class="trust-num-wrap">
-        <span class="trust-num" data-count="500">0</span>
-        <span class="trust-sym">+</span>
-      </div>
-      <span class="trust-label">Cases Handled</span>
-    </div>
-    <div class="trust-item">
-      <div class="trust-num-wrap">
-        <span class="trust-num">100</span>
-        <span class="trust-sym">%</span>
-      </div>
-      <span class="trust-label">Confidential</span>
-    </div>
-  </div>
-</div>
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="max-container about-2col">
-    <div>
-      <div class="section-top reveal">
-        <p class="eyebrow">Expertise You Can Trust</p>
-        <h2 class="section-h2">High-Value Legal Counsel</h2>
-        <div class="section-rule"></div>
-        <p class="body-p">I am Nancy Nathan, a practicing advocate specializing in International Law and Organization. With a client-first approach, I deliver clear, practical legal solutions that protect your rights and interests.</p>
-      </div>
-    </div>
-    <div class="pillar-list reveal reveal-d1">
-      <div class="pillar-item open">
-        <div class="pillar-header" onclick="togglePillar(this)">
-          <div class="pillar-icon-wrap">⚖️</div>
-          <span class="pillar-title">Deep Legal Expertise</span>
-          <span class="pillar-arrow">▾</span>
-        </div>
-        <div class="pillar-body"><p>Specialized knowledge in International Law with years of multi-jurisdictional case experience and courtroom advocacy.</p></div>
-      </div>
-      <div class="pillar-item">
-        <div class="pillar-header" onclick="togglePillar(this)">
-          <div class="pillar-icon-wrap">🔒</div>
-          <span class="pillar-title">Absolute Confidentiality</span>
-          <span class="pillar-arrow">▾</span>
-        </div>
-        <div class="pillar-body"><p>Every case is treated with strict discretion. Your privacy and the integrity of your legal matter are always my top priority.</p></div>
-      </div>
-      <div class="pillar-item">
-        <div class="pillar-header" onclick="togglePillar(this)">
-          <div class="pillar-icon-wrap">💡</div>
-          <span class="pillar-title">Practical Solutions</span>
-          <span class="pillar-arrow">▾</span>
-        </div>
-        <div class="pillar-body"><p>No legal jargon — just clear, actionable advice and strategies designed to resolve your matter efficiently and effectively.</p></div>
-      </div>
-      <div class="pillar-item">
-        <div class="pillar-header" onclick="togglePillar(this)">
-          <div class="pillar-icon-wrap">🤝</div>
-          <span class="pillar-title">Client-First Always</span>
-          <span class="pillar-arrow">▾</span>
-        </div>
-        <div class="pillar-body"><p>Your goals drive my strategy. I listen carefully, advise honestly, and advocate relentlessly with your best interests at heart.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-up');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
 
-<!-- PRACTICE AREAS -->
-<section id="practice">
-  <div class="max-container">
-    <div class="section-top reveal">
-      <p class="eyebrow">Practice Areas</p>
-      <h2 class="section-h2">Comprehensive Solutions</h2>
-      <div class="section-rule"></div>
-    </div>
-  <div class="pa-scroll" id="paScroll">
-    <div class="pa-card">
-      <div class="pa-card-glow"></div>
-      <div class="pa-num">01</div>
-      <div class="pa-icon-wrap">⚖️</div>
-      <div class="pa-name">Civil Law</div>
-      <div class="pa-desc">Disputes, contracts, property matters, and civil litigation — handled with precision and care.</div>
-      <span class="pa-tag">Contracts · Property</span>
-    </div>
-    <div class="pa-card">
-      <div class="pa-card-glow"></div>
-      <div class="pa-num">02</div>
-      <div class="pa-icon-wrap">🏛️</div>
-      <div class="pa-name">Criminal Law</div>
-      <div class="pa-desc">Strong defense and unwavering representation in criminal matters at all court levels.</div>
-      <span class="pa-tag">Defense · Courts</span>
-    </div>
-    <div class="pa-card">
-      <div class="pa-card-glow"></div>
-      <div class="pa-num">03</div>
-      <div class="pa-icon-wrap">👨‍👩‍👧</div>
-      <div class="pa-name">Family Law</div>
-      <div class="pa-desc">Sensitive handling of divorce, custody, adoption, and all family-related legal matters.</div>
-      <span class="pa-tag">Divorce · Custody</span>
-    </div>
-    <div class="pa-card">
-      <div class="pa-card-glow"></div>
-      <div class="pa-num">04</div>
-      <div class="pa-icon-wrap">📋</div>
-      <div class="pa-name">Legal Consultation</div>
-      <div class="pa-desc">Clear, actionable legal advice tailored to your unique situation and specific needs.</div>
-      <span class="pa-tag">Advice · Strategy</span>
-    </div>
-  </div>
-  <div class="pa-dots" id="paDots">
-    <div class="pa-dot active"></div>
-    <div class="pa-dot"></div>
-    <div class="pa-dot"></div>
-    <div class="pa-dot"></div>
-  </div>
-</section>
+        document.querySelectorAll('section, .group, .p-8').forEach(el => {
+            el.classList.add('opacity-0');
+            observer.observe(el);
+        });
 
-<!-- WHY CHOOSE ME -->
-<section id="why">
-  <div class="max-container">
-    <div class="section-top reveal">
-      <p class="eyebrow" style="color:var(--gold)">Professionalism &amp; Integrity</p>
-      <h2 class="section-h2" style="color:var(--white)">Why Choose Me</h2>
-      <div class="section-rule"></div>
-    </div>
-    <div class="why-grid">
-      <div class="why-card reveal">
-        <div class="why-icon">⚖️</div>
-        <div class="why-title">Professional Legal Guidance</div>
-        <div class="why-text">Deeply researched and strategic advice tailored to navigate complex legal landscapes.</div>
-      </div>
-      <div class="why-card reveal reveal-d1">
-        <div class="why-icon">🔒</div>
-        <div class="why-title">Confidential &amp; Reliable</div>
-        <div class="why-text">Your privacy is paramount. Every case is handled with absolute discretion and trust.</div>
-      </div>
-      <div class="why-card reveal reveal-d2">
-        <div class="why-icon">🤝</div>
-        <div class="why-title">Client-Focused Approach</div>
-        <div class="why-text">I listen carefully to your goals and advocate tirelessly with your best interests at heart.</div>
-      </div>
-      <div class="why-card reveal reveal-d3">
-        <div class="why-icon">🏛️</div>
-        <div class="why-title">Proven Courtroom Advocacy</div>
-        <div class="why-text">Strong, unwavering representation at all levels of the justice system.</div>
-      </div>
-    </div>
-  </div>
-</section>
+        // Go to Top Functionality
+        const goToTopBtn = document.getElementById('go-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                goToTopBtn.classList.add('show');
+            } else {
+                goToTopBtn.classList.remove('show');
+            }
+        });
 
-<!-- TESTIMONIAL -->
-<section id="testimonial">
-  <div class="max-container">
-    <div class="section-top reveal">
-      <p class="eyebrow">Client Feedback</p>
-      <h2 class="section-h2">Recommendations</h2>
-      <div class="section-rule"></div>
-    </div>
-    <div class="quote-box">
-      <div class="quote-mark">"</div>
-      <blockquote class="quote-text reveal">
-        "Nancy Nathan's guidance was a turning point. She explained everything clearly, fought for my case tirelessly, and the outcome exceeded my expectations."
-      </blockquote>
-      <div class="quote-author reveal reveal-d1">
-        <div class="quote-avatar">R</div>
-        <div>
-          <div class="quote-name">Rajesh M.</div>
-          <div class="quote-role">Civil Law Client</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+        goToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="max-container">
-    <div class="section-top reveal">
-      <p class="eyebrow">Get Legal Advice</p>
-      <h2 class="section-h2">Start Your Consultation</h2>
-      <div class="section-rule"></div>
-    </div>
-    <div class="contact-cards reveal">
-      <a href="tel:+91XXXXXXXXXX" class="cc">
-        <div class="cc-icon">📞</div>
-        <div>
-          <div class="cc-label">Call Now</div>
-          <div class="cc-val">+91 XXXXX XXXXX</div>
-        </div>
-        <span class="cc-arrow">›</span>
-      </a>
-      <a href="mailto:nancynathan005@gmail.com" class="cc">
-        <div class="cc-icon">✉️</div>
-        <div>
-          <div class="cc-label">Email Support</div>
-          <div class="cc-val">nancynathan005@gmail.com</div>
-        </div>
-        <span class="cc-arrow">›</span>
-      </a>
-    </div>
-    <div class="cta-final reveal reveal-d1">
-      <div class="cta-final-h">Ready to protect your interests?</div>
-      <p class="cta-final-text">Book a consultation today. I'll listen to your situation and provide the professional guidance you need.</p>
-      <a href="mailto:nancynathan005@gmail.com" class="btn-primary">
-        Book Consultation
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="max-container">
-    <div class="footer-logo">Nancy <span>Nathan</span></div>
-    <div class="footer-socials">
-      <a href="https://www.linkedin.com/in/nancy-nathan-4397b9260" target="_blank" aria-label="LinkedIn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-      </a>
-      <a href="https://www.youtube.com/channel/UCtkzPdYs10mUFBvweqpQWmQ" target="_blank" aria-label="YouTube">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
-      </a>
-      <a href="https://www.instagram.com/advocate.nancy_nathan/" target="_blank" aria-label="Instagram">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-      </a>
-    </div>
-    <p class="footer-copy">&copy; 2026 · Nancy Nathan · Advocate &amp; Legal Consultant</p>
-  </div>
-</footer>
-
-<script>
-/* ── CURSOR ── */
-const cur=document.getElementById('cursor'),cf=document.getElementById('cursor-follow');
-let mx=0,my=0,fx=0,fy=0;
-document.addEventListener('mousemove',e=>{
-  mx=e.clientX;my=e.clientY;
-  cur.style.transform=`translate(${mx}px,${my}px)`;
-});
-function animateCursor(){
-  fx+=(mx-fx)*.12;fy+=(my-fy)*.12;
-  cf.style.transform=`translate(${fx}px,${fy}px)`;
-  requestAnimationFrame(animateCursor);
-}
-animateCursor();
-document.querySelectorAll('a,button,.pillar-header,.why-card').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{
-    cf.style.width='50px';cf.style.height='50px';
-    cf.style.borderColor='rgba(200,164,86,.8)';
-  });
-  el.addEventListener('mouseleave',()=>{
-    cf.style.width='32px';cf.style.height='32px';
-    cf.style.borderColor='rgba(200,164,86,.5)';
-  });
-});
-
-/* ── HAMBURGER ── */
-const ham=document.getElementById('ham'),drawer=document.getElementById('drawer');
-function closeDrawer(){ham.classList.remove('open');drawer.classList.remove('open');document.body.style.overflow=''}
-ham.addEventListener('click',()=>{
-  const open=ham.classList.toggle('open');
-  drawer.classList.toggle('open',open);
-  document.body.style.overflow=open?'hidden':'';
-});
-
-/* ── DESKTOP NAV ── */
-const dlinks=document.getElementById('dlinks');
-function checkNav(){dlinks.style.display=window.innerWidth>=640?'flex':'none'}
-checkNav();window.addEventListener('resize',checkNav);
-
-/* ── PARTICLES ── */
-const canvas=document.getElementById('particles');
-const ctx=canvas.getContext('2d');
-let W,H,pts=[];
-function resizeCanvas(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight}
-resizeCanvas();window.addEventListener('resize',()=>{resizeCanvas();initPts()});
-function initPts(){
-  pts=Array.from({length:50},()=>({
-    x:Math.random()*W,y:Math.random()*H,
-    vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,
-    r:Math.random()*1.5+.5,
-    a:Math.random()
-  }));
-}
-initPts();
-function drawParticles(){
-  ctx.clearRect(0,0,W,H);
-  pts.forEach(p=>{
-    p.x+=p.vx;p.y+=p.vy;
-    if(p.x<0)p.x=W;if(p.x>W)p.x=0;
-    if(p.y<0)p.y=H;if(p.y>H)p.y=0;
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle=`rgba(200,164,86,${p.a*.35})`;ctx.fill();
-  });
-  // connect nearby
-  pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{
-    const dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);
-    if(d<90){
-      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
-      ctx.strokeStyle=`rgba(200,164,86,${.08*(1-d/90)})`;
-      ctx.lineWidth=.5;ctx.stroke();
-    }
-  }));
-  requestAnimationFrame(drawParticles);
-}
-drawParticles();
-
-/* ── SCROLL REVEAL ── */
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
-},{threshold:.12});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-
-/* ── TRUST COUNTER ── */
-const counterObs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(!e.isIntersecting)return;
-    e.target.querySelectorAll('[data-count]').forEach(el=>{
-      const target=+el.dataset.count,dur=1600,step=16;
-      let current=0,elapsed=0;
-      const t=setInterval(()=>{
-        elapsed+=step;current=Math.min(Math.round(target*(elapsed/dur)),target);
-        el.textContent=current;if(current>=target)clearInterval(t);
-      },step);
-    });
-    counterObs.unobserve(e.target);
-  });
-},{threshold:.5});
-document.querySelectorAll('#trust').forEach(el=>counterObs.observe(el));
-
-/* ── PRACTICE SCROLL DOTS & AUTO-SCROLL ── */
-const sc = document.getElementById('paScroll');
-const dots = document.querySelectorAll('.pa-dot');
-let autoScrollTimer;
-
-function updateDots() {
-  const itemCount = sc.children.length;
-  const idx = Math.round(sc.scrollLeft / (sc.scrollWidth / itemCount));
-  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-}
-
-function startAutoScroll() {
-  stopAutoScroll();
-  autoScrollTimer = setInterval(() => {
-    if (window.innerWidth >= 640) return; // Only mobile
-    const itemCount = sc.children.length;
-    let newLeft = sc.scrollLeft + (sc.scrollWidth / itemCount);
-    if (newLeft >= sc.scrollWidth - (sc.clientWidth + 10)) newLeft = 0; // Loop back
-    sc.scrollTo({ left: newLeft, behavior: 'smooth' });
-  }, 4000);
-}
-
-function stopAutoScroll() {
-  clearInterval(autoScrollTimer);
-}
-
-sc.addEventListener('scroll', updateDots, { passive: true });
-sc.addEventListener('touchstart', stopAutoScroll, { passive: true });
-sc.addEventListener('touchend', startAutoScroll, { passive: true });
-
-// Start on load
-startAutoScroll();
-
-/* ── ACCORDION ── */
-function togglePillar(header){
-  const item=header.parentElement;
-  const isOpen=item.classList.contains('open');
-  document.querySelectorAll('.pillar-item.open').forEach(i=>{
-    if(i!==item)i.classList.remove('open');
-  });
-  item.classList.toggle('open',!isOpen);
-}
-
-/* ── NAV HIDE ON SCROLL DOWN ── */
-let lastY=0;
-window.addEventListener('scroll',()=>{
-  const y=window.scrollY;
-  document.querySelector('nav').style.transform=
-    (y>lastY&&y>120)?'translateY(-100%)':'translateY(0)';
-  lastY=y;
-},{passive:true});
-
-/* ── WHY CARD TOUCH RIPPLE ── */
-document.querySelectorAll('.why-card,.pa-card,.cc').forEach(card=>{
-  card.addEventListener('touchstart',function(e){
-    this.style.transform='scale(.97)';
-  },{passive:true});
-  card.addEventListener('touchend',function(){
-    this.style.transform='';
-  },{passive:true});
-});
-
-/* ── TO TOP ── */
-const toTop = document.getElementById('to-top');
-window.addEventListener('scroll',()=>{
-  toTop.classList.toggle('show',window.scrollY > 400);
-},{passive:true});
-toTop.addEventListener('click',()=>{
-  window.scrollTo({top:0,behavior:'smooth'});
-});
-</script>
+        // Initialize Lucide Icons after all elements are in the DOM
+        lucide.createIcons();
+    </script>
 </body>
 </html>
