@@ -261,7 +261,7 @@ nav{
 }
 .pa-scroll::-webkit-scrollbar{display:none}
 .pa-card{
-  flex:0 0 72vw;max-width:280px;
+  flex:0 0 88vw;max-width:320px;
   scroll-snap-align:start;
   background:var(--navy);border-radius:20px;
   padding:1.8rem 1.5rem;position:relative;overflow:hidden;
@@ -437,14 +437,44 @@ footer{
   #trust{padding:1.6rem 3rem}
   .trust-grid{max-width:900px;grid-template-columns:repeat(4,1fr)}
   #about,#practice,#why,#testimonial,#contact{padding-left:3rem;padding-right:3rem}
-  .pa-scroll{margin:0 -3rem;padding:0 3rem .8rem}
-  .pa-card{flex:0 0 260px}
+  .pa-scroll{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1.5rem;
+    margin:0;
+    padding:0;
+    overflow-x:visible;
+  }
+  .pa-card{
+    flex:none;
+    max-width:none;
+    margin:0;
+  }
+  .pa-dots{display:none}
   .why-grid{grid-template-columns:repeat(4,1fr)}
 }
-@media(min-width:900px){
-  .pa-card{flex:0 0 240px}
+@media(min-width:1024px){
+  .pa-scroll{grid-template-columns:repeat(4,1fr)}
   .about-2col{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
 }
+
+/* ────────────── TO TOP BUTTON ────────────── */
+#to-top{
+  position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;
+  width:42px;height:42px;border-radius:10px;
+  background:rgba(6,14,26,.85);backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--border);color:var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;opacity:0;visibility:hidden;
+  transition:all .35s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 8px 24px rgba(0,0,0,.2);
+}
+#to-top.show{opacity:1;visibility:visible;transform:translateY(0)}
+#to-top:not(.show){transform:translateY(15px)}
+#to-top:hover{background:var(--gold);color:var(--ink);border-color:var(--gold2);transform:translateY(-3px)}
+#to-top:active{transform:scale(.92)}
+@media(min-width:640px){#to-top{bottom:2rem;right:2rem;width:48px;height:48px}}
 </style>
 </head>
 <body>
@@ -452,6 +482,11 @@ footer{
 <!-- CUSTOM CURSOR -->
 <div id="cursor"></div>
 <div id="cursor-follow"></div>
+
+<!-- TO TOP -->
+<button id="to-top" aria-label="Scroll to top">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
 
 <!-- NAV -->
 <nav>
@@ -837,13 +872,38 @@ const counterObs=new IntersectionObserver(entries=>{
 },{threshold:.5});
 document.querySelectorAll('#trust').forEach(el=>counterObs.observe(el));
 
-/* ── PRACTICE SCROLL DOTS ── */
-const sc=document.getElementById('paScroll');
-const dots=document.querySelectorAll('.pa-dot');
-sc.addEventListener('scroll',()=>{
-  const idx=Math.round(sc.scrollLeft/(sc.scrollWidth/4));
-  dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
-},{passive:true});
+/* ── PRACTICE SCROLL DOTS & AUTO-SCROLL ── */
+const sc = document.getElementById('paScroll');
+const dots = document.querySelectorAll('.pa-dot');
+let autoScrollTimer;
+
+function updateDots() {
+  const itemCount = sc.children.length;
+  const idx = Math.round(sc.scrollLeft / (sc.scrollWidth / itemCount));
+  dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+}
+
+function startAutoScroll() {
+  stopAutoScroll();
+  autoScrollTimer = setInterval(() => {
+    if (window.innerWidth >= 640) return; // Only mobile
+    const itemCount = sc.children.length;
+    let newLeft = sc.scrollLeft + (sc.scrollWidth / itemCount);
+    if (newLeft >= sc.scrollWidth - (sc.clientWidth + 10)) newLeft = 0; // Loop back
+    sc.scrollTo({ left: newLeft, behavior: 'smooth' });
+  }, 4000);
+}
+
+function stopAutoScroll() {
+  clearInterval(autoScrollTimer);
+}
+
+sc.addEventListener('scroll', updateDots, { passive: true });
+sc.addEventListener('touchstart', stopAutoScroll, { passive: true });
+sc.addEventListener('touchend', startAutoScroll, { passive: true });
+
+// Start on load
+startAutoScroll();
 
 /* ── ACCORDION ── */
 function togglePillar(header){
@@ -872,6 +932,15 @@ document.querySelectorAll('.why-card,.pa-card,.cc').forEach(card=>{
   card.addEventListener('touchend',function(){
     this.style.transform='';
   },{passive:true});
+});
+
+/* ── TO TOP ── */
+const toTop = document.getElementById('to-top');
+window.addEventListener('scroll',()=>{
+  toTop.classList.toggle('show',window.scrollY > 400);
+},{passive:true});
+toTop.addEventListener('click',()=>{
+  window.scrollTo({top:0,behavior:'smooth'});
 });
 </script>
 </body>
