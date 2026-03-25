@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Nancy Nathan</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,600;0,700;1,500;1,700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#060e1a;
+  --deep:#0a1628;
+  --navy:#0f2040;
+  --mid:#1a3560;
+  --gold:#c8a456;
+  --gold2:#e8c87a;
+  --goldl:rgba(200,164,86,.12);
+  --cream:#faf7f2;
+  --warm:#f3ede4;
+  --border:rgba(200,164,86,.18);
+  --muted:#8a8070;
+  --txt:#2a3240;
+  --white:#ffffff;
+}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:'Jost',sans-serif;
+  color:var(--txt);background:var(--cream);
+  overflow-x:hidden;
+  cursor:none;
+}
+/* custom cursor – desktop only */
+#cursor,#cursor-follow{
+  position:fixed;pointer-events:none;z-index:9999;border-radius:50%;
+  transition:transform .1s;will-change:transform;
+}
+#cursor{width:8px;height:8px;background:var(--gold);top:-4px;left:-4px}
+#cursor-follow{
+  width:32px;height:32px;border:1px solid rgba(200,164,86,.5);
+  top:-16px;left:-16px;
+  transition:transform .12s,width .3s,height .3s,border-color .3s;
+}
+@media(hover:none){#cursor,#cursor-follow{display:none}body{cursor:auto}}
+
+/* ────────────── NAV ────────────── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 1.2rem;height:60px;
+  background:rgba(6,14,26,.95);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{
+  font-family:'Cormorant',serif;font-size:1.25rem;font-weight:700;
+  color:var(--white);letter-spacing:.03em;text-decoration:none;
+}
+.nav-logo span{color:var(--gold);font-style:italic}
+.nav-right{display:flex;align-items:center;gap:.8rem}
+.nav-book{
+  background:var(--gold);color:var(--ink);
+  font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  padding:.6rem 1.4rem;border-radius:12px;text-decoration:none;
+  transition:background .2s,transform .15s,box-shadow .2s;
+}
+.nav-book:hover{background:var(--gold2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(200,164,86,.25)}
+/* hamburger */
+.ham{
+  width:36px;height:36px;border:1px solid var(--border);border-radius:8px;
+  background:transparent;cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:5px;padding:0;
+  transition:border-color .2s;
+}
+.ham span{display:block;width:16px;height:1.5px;background:var(--white);transition:all .3s;border-radius:2px}
+.ham.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.ham.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.ham.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+/* mobile drawer */
+.drawer{
+  position:fixed;top:60px;left:0;right:0;bottom:0;z-index:400;
+  background:rgba(6,14,26,.98);backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2rem;
+  transform:translateX(100%);transition:transform .45s cubic-bezier(.77,0,.175,1);
+}
+.drawer.open{transform:translateX(0)}
+.drawer a{
+  font-family:'Cormorant',serif;font-size:1.6rem;font-weight:700;font-style:italic;
+  color:rgba(255,255,255,.7);text-decoration:none;letter-spacing:.02em;
+  transition:color .2s;
+}
+.drawer a:hover{color:var(--gold)}
+.drawer-rule{width:40px;height:1px;background:var(--border)}
+
+/* ────────────── HERO ────────────── */
+#hero{
+  min-height:100dvh;
+  background:var(--ink);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:90px 1.4rem 3rem;
+}
+/* animated particle canvas */
+#particles{position:absolute;inset:0;opacity:.45}
+/* diagonal gold slash */
+.slash{
+  position:absolute;
+  width:1px;height:65vh;
+  background:linear-gradient(to bottom,transparent,rgba(200,164,86,.45),transparent);
+  right:18%;top:50%;transform:translateY(-50%) rotate(15deg);
+  pointer-events:none;
+}
+.slash2{
+  position:absolute;
+  width:1px;height:40vh;
+  background:linear-gradient(to bottom,transparent,rgba(200,164,86,.2),transparent);
+  right:22%;top:50%;transform:translateY(-50%) rotate(15deg);
+  pointer-events:none;
+}
+.hero-content{position:relative;z-index:2;max-width:520px}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  border:1px solid var(--border);
+  color:var(--gold);font-size:.68rem;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;padding:.38rem 1rem;border-radius:40px;
+  margin-bottom:1.8rem;
+  opacity:0;animation:fadeUp .6s .2s forwards;
+}
+.hero-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+.hero-name{
+  font-family:'Cormorant',serif;
+  font-size:clamp(3.4rem,14vw,5.5rem);
+  font-weight:700;color:var(--white);line-height:1;
+  opacity:0;animation:fadeUp .7s .32s forwards;
+}
+.hero-name em{font-style:italic;color:var(--gold);display:block}
+.hero-role{
+  font-size:.78rem;font-weight:400;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(255,255,255,.38);margin-top:.9rem;
+  opacity:0;animation:fadeUp .7s .44s forwards;
+}
+.hero-divider{
+  display:flex;align-items:center;gap:1rem;margin:1.8rem 0;
+  opacity:0;animation:fadeUp .6s .52s forwards;
+}
+.hero-divider::before{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--gold),transparent);max-width:60px}
+.hero-divider-text{font-size:.72rem;color:rgba(255,255,255,.3);letter-spacing:.1em}
+.hero-desc{
+  color:rgba(255,255,255,.48);font-size:.95rem;line-height:1.85;
+  opacity:0;animation:fadeUp .7s .6s forwards;
+}
+.hero-cta{
+  display:flex;flex-direction:column;gap:.85rem;margin-top:2.2rem;
+  opacity:0;animation:fadeUp .7s .7s forwards;
+}
+.btn-primary, .btn-secondary{
+  display:inline-flex;align-items:center;justify-content:center;gap:.6rem;
+  padding:1rem 2rem;border-radius:12px;
+  font-size:.82rem;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;text-decoration:none;
+  transition:transform .2s,box-shadow .2s,background .2s,border-color .2s,color .2s;
+  cursor:pointer;border:none;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--gold),#b8903a);
+  color:var(--ink);
+  box-shadow:0 8px 32px rgba(200,164,86,.3);
+  position:relative;overflow:hidden;
+}
+.btn-primary::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.15),transparent);
+  opacity:0;transition:opacity .2s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(200,164,86,.4)}
+.btn-primary:hover::after{opacity:1}
+.btn-primary:active{transform:scale(.97)}
+
+.btn-secondary{
+  border:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.65);
+  background:transparent;
+}
+.btn-secondary:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,164,86,.06);transform:translateY(-2px)}
+/* floating scroll pill */
+.scroll-pill{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  color:rgba(255,255,255,.25);font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;
+  z-index:2;
+}
+.scroll-line{
+  width:1px;height:40px;
+  background:linear-gradient(to bottom,rgba(200,164,86,.5),transparent);
+  animation:scrollDrop 1.8s ease-in-out infinite;
+}
+@keyframes scrollDrop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform:scaleY(1);transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ────────────── TRUST BAR ────────────── */
+#trust{
+  background:var(--navy);
+  padding:1.4rem 1.4rem;
+  border-bottom:1px solid var(--border);
+}
+.trust-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;
+  max-width:520px;margin:0 auto;
+}
+.trust-item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.25rem}
+.trust-num{font-family:'Cormorant',serif;font-size:1.8rem;font-weight:700;color:var(--gold);line-height:1}
+.trust-label{font-size:.65rem;color:rgba(255,255,255,.4);letter-spacing:.08em;text-transform:uppercase}
+
+/* ────────────── ABOUT ────────────── */
+#about{background:var(--warm);padding:4.5rem 1.4rem}
+.section-top{margin-bottom:2.2rem}
+.eyebrow{font-size:.68rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.section-h2{font-family:'Cormorant',serif;font-size:clamp(2rem,8vw,2.8rem);font-weight:700;color:var(--ink);line-height:1.15}
+.section-rule{width:36px;height:2px;background:var(--gold);border-radius:2px;margin:1.1rem 0 1.4rem}
+.body-p{font-size:.95rem;line-height:1.85;color:var(--txt);margin-bottom:1rem}
+/* accordion pillars */
+.pillar-list{display:flex;flex-direction:column;gap:.7rem;margin-top:1.8rem}
+.pillar-item{
+  background:var(--white);border:1px solid rgba(0,0,0,.06);
+  border-radius:14px;overflow:hidden;
+  transition:box-shadow .2s;
+}
+.pillar-item:hover{box-shadow:0 4px 20px rgba(0,0,0,.07)}
+.pillar-header{
+  display:flex;align-items:center;gap:.9rem;padding:1rem 1.1rem;
+  cursor:pointer;user-select:none;
+}
+.pillar-icon-wrap{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--gold),#b8903a);
+  display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;
+}
+.pillar-title{font-size:.92rem;font-weight:600;color:var(--ink);flex:1}
+.pillar-arrow{
+  font-size:.7rem;color:var(--muted);transition:transform .3s;
+  border:1px solid rgba(0,0,0,.1);border-radius:6px;
+  width:24px;height:24px;display:flex;align-items:center;justify-content:center;
+}
+.pillar-item.open .pillar-arrow{transform:rotate(180deg);background:var(--goldl);border-color:var(--border);color:var(--gold)}
+.pillar-body{
+  max-height:0;overflow:hidden;
+  transition:max-height .35s cubic-bezier(.4,0,.2,1),padding .3s;
+  padding:0 1.1rem;
+}
+.pillar-item.open .pillar-body{max-height:120px;padding:.2rem 1.1rem 1rem}
+.pillar-body p{font-size:.85rem;color:var(--muted);line-height:1.7}
+
+/* ────────────── PRACTICE ────────────── */
+#practice{background:var(--cream);padding:4.5rem 1.4rem}
+.pa-scroll{
+  display:flex;gap:1rem;overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:.5rem;margin:0 -1.4rem;padding:0 1.4rem .8rem;
+  scrollbar-width:none;
+}
+.pa-scroll::-webkit-scrollbar{display:none}
+.pa-card{
+  flex:0 0 72vw;max-width:280px;
+  scroll-snap-align:start;
+  background:var(--navy);border-radius:20px;
+  padding:1.8rem 1.5rem;position:relative;overflow:hidden;
+  transition:transform .25s;
+}
+.pa-card:active{transform:scale(.97)}
+.pa-card-glow{
+  position:absolute;width:150px;height:150px;border-radius:50%;
+  background:radial-gradient(circle,rgba(200,164,86,.15) 0%,transparent 70%);
+  bottom:-30px;right:-30px;pointer-events:none;
+}
+.pa-num{
+  font-family:'Cormorant',serif;font-size:3.5rem;font-weight:700;
+  color:rgba(200,164,86,.12);line-height:1;
+}
+.pa-icon-wrap{
+  width:44px;height:44px;border-radius:12px;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;margin:1rem 0 .8rem;
+}
+.pa-name{font-family:'Cormorant',serif;font-size:1.35rem;font-weight:700;color:var(--white);margin-bottom:.5rem}
+.pa-desc{font-size:.8rem;color:rgba(255,255,255,.45);line-height:1.65}
+.pa-tag{
+  display:inline-block;margin-top:1.1rem;
+  font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold);border:1px solid var(--border);
+  padding:.25rem .7rem;border-radius:40px;
+}
+/* dots indicator */
+.pa-dots{display:flex;justify-content:center;gap:.5rem;margin-top:1.1rem}
+.pa-dot{
+  width:6px;height:6px;border-radius:3px;
+  background:rgba(0,0,0,.15);transition:width .3s,background .3s;
+}
+.pa-dot.active{width:20px;background:var(--gold)}
+
+/* ────────────── WHY ────────────── */
+#why{
+  background:var(--deep);
+  padding:4.5rem 1.4rem;
+  position:relative;overflow:hidden;
+}
+#why::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(26,53,96,.6) 0%,transparent 70%);
+  pointer-events:none;
+}
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-top:2rem}
+.why-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;padding:1.4rem 1.2rem;
+  position:relative;overflow:hidden;
+  transition:background .3s,border-color .3s,transform .2s;
+}
+.why-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:linear-gradient(to bottom,var(--gold),transparent);
+  transform:scaleY(0);transform-origin:top;
+  transition:transform .4s ease;
+}
+.why-card:hover,.why-card:focus-within{
+  background:rgba(200,164,86,.07);
+  border-color:rgba(200,164,86,.2);
+  transform:translateY(-3px);
+}
+.why-card:hover::before{transform:scaleY(1)}
+.why-icon{font-size:1.3rem;margin-bottom:.7rem}
+.why-title{font-size:.9rem;font-weight:600;color:var(--white);margin-bottom:.4rem;line-height:1.3}
+.why-text{font-size:.75rem;color:rgba(255,255,255,.38);line-height:1.65}
+
+/* ────────────── TESTIMONIAL ────────────── */
+#testimonial{
+  background:var(--warm);padding:4rem 1.4rem;
+  position:relative;overflow:hidden;
+}
+.quote-mark{
+  font-family:'Cormorant',serif;font-size:8rem;font-weight:700;
+  color:rgba(200,164,86,.12);line-height:.7;
+  position:absolute;top:1.5rem;left:1rem;
+  pointer-events:none;user-select:none;
+}
+.quote-text{
+  font-family:'Cormorant',serif;font-size:clamp(1.3rem,5vw,1.7rem);
+  font-style:italic;font-weight:600;
+  color:var(--ink);line-height:1.5;
+  position:relative;z-index:1;padding-top:2rem;
+}
+.quote-author{margin-top:1.5rem;display:flex;align-items:center;gap:.9rem}
+.quote-avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),#b8903a);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant',serif;font-size:1.1rem;font-weight:700;color:var(--ink);
+  flex-shrink:0;
+}
+.quote-name{font-size:.88rem;font-weight:600;color:var(--ink)}
+.quote-role{font-size:.75rem;color:var(--muted);margin-top:.1rem}
+
+/* ────────────── CONTACT ────────────── */
+#contact{background:var(--navy);padding:4.5rem 1.4rem}
+#contact .eyebrow{color:var(--gold)}
+#contact .section-h2{color:var(--white)}
+#contact .section-rule{background:var(--gold)}
+.contact-cards{display:flex;flex-direction:column;gap:.85rem;margin-bottom:2rem}
+.cc{
+  display:flex;align-items:center;gap:1rem;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:1.1rem 1.2rem;
+  text-decoration:none;
+  transition:background .2s,border-color .2s,transform .15s;
+}
+.cc:hover,.cc:active{
+  background:rgba(200,164,86,.08);border-color:rgba(200,164,86,.25);
+  transform:translateX(4px);
+}
+.cc-icon{
+  width:42px;height:42px;border-radius:12px;
+  background:linear-gradient(135deg,var(--gold),#b8903a);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;flex-shrink:0;
+}
+.cc-label{font-size:.68rem;color:rgba(255,255,255,.35);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.2rem}
+.cc-val{font-size:.92rem;font-weight:500;color:var(--white)}
+.cc-arrow{margin-left:auto;color:rgba(255,255,255,.25);font-size:.9rem;transition:transform .2s}
+.cc:hover .cc-arrow{transform:translateX(3px);color:var(--gold)}
+/* cta box */
+.cta-final{
+  background:linear-gradient(135deg,rgba(200,164,86,.12),rgba(200,164,86,.04));
+  border:1px solid rgba(200,164,86,.2);
+  border-radius:20px;padding:2rem 1.5rem;text-align:center;
+}
+.cta-final-text{font-size:.88rem;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:1.5rem}
+.cta-final-h{
+  font-family:'Cormorant',serif;font-size:1.6rem;font-weight:700;font-style:italic;
+  color:var(--white);margin-bottom:.5rem;
+}
+
+/* ────────────── FOOTER ────────────── */
+footer{
+  background:var(--ink);padding:1.8rem 1.4rem;
+  text-align:center;border-top:1px solid var(--border);
+}
+.footer-logo{
+  font-family:'Cormorant',serif;font-size:1.3rem;font-weight:700;
+  color:var(--white);margin-bottom:.5rem;
+}
+.footer-logo span{color:var(--gold);font-style:italic}
+.footer-copy{font-size:.7rem;color:rgba(255,255,255,.22);letter-spacing:.04em}
+
+/* ────────────── SCROLL REVEAL ────────────── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s,transform .65s}
+.reveal.visible{opacity:1;transform:none}
+.reveal-d1{transition-delay:.08s}
+.reveal-d2{transition-delay:.16s}
+.reveal-d3{transition-delay:.24s}
+.reveal-d4{transition-delay:.32s}
+
+/* ────────────── KEYFRAMES ────────────── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ────────────── DESKTOP TWEAKS ────────────── */
+@media(min-width:640px){
+  nav{padding:0 2.5rem;height:68px}
+  .ham{display:none}
+  .desktop-links{display:flex;gap:2rem;list-style:none}
+  .desktop-links a{color:rgba(255,255,255,.6);text-decoration:none;font-size:.78rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;transition:color .2s}
+  .desktop-links a:hover{color:var(--gold)}
+  #hero{padding:110px 3rem 3rem;align-items:center}
+  .hero-content{max-width:560px}
+  .hero-cta{flex-direction:row}
+  #trust{padding:1.6rem 3rem}
+  .trust-grid{max-width:900px;grid-template-columns:repeat(4,1fr)}
+  #about,#practice,#why,#testimonial,#contact{padding-left:3rem;padding-right:3rem}
+  .pa-scroll{margin:0 -3rem;padding:0 3rem .8rem}
+  .pa-card{flex:0 0 260px}
+  .why-grid{grid-template-columns:repeat(4,1fr)}
+}
+@media(min-width:900px){
+  .pa-card{flex:0 0 240px}
+  .about-2col{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+}
+</style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-follow"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Nancy <span>Nathan</span></a>
+  <ul class="desktop-links" id="dlinks" style="display:none">
+    <li><a href="#about">About</a></li>
+    <li><a href="#practice">Practice</a></li>
+    <li><a href="#why">Why Me</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#contact" class="nav-book">Book Now</a>
+    <button class="ham" id="ham" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- DRAWER -->
+<div class="drawer" id="drawer">
+  <a href="#about"   onclick="closeDrawer()">About</a>
+  <div class="drawer-rule"></div>
+  <a href="#practice" onclick="closeDrawer()">Practice</a>
+  <div class="drawer-rule"></div>
+  <a href="#why"     onclick="closeDrawer()">Why Choose Me</a>
+  <div class="drawer-rule"></div>
+  <a href="#contact" onclick="closeDrawer()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="particles"></canvas>
+  <div class="slash"></div>
+  <div class="slash2"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Practicing Advocate · International Law
+    </div>
+    <h1 class="hero-name">Nancy<em>Nathan</em></h1>
+    <p class="hero-role">Advocate &amp; Legal Consultant</p>
+    <div class="hero-divider">
+      <span class="hero-divider-text">Trusted · Confidential · Experienced</span>
+    </div>
+    <p class="hero-desc">Providing reliable legal services with a client-focused approach — from courtroom advocacy to strategic consultation.</p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn-primary">
+        <span>📅</span> Book a Consultation
+      </a>
+      <a href="#practice" class="btn-secondary">
+        <span>⚖</span> Practice Areas
+      </a>
+    </div>
+  </div>
+  <div class="scroll-pill">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div id="trust">
+  <div class="trust-grid">
+    <div class="trust-item">
+      <span class="trust-num" data-count="10">0</span><span class="trust-num" style="font-size:1rem">+</span>
+      <span class="trust-label">Yrs Experience</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-num" data-count="500">0</span><span class="trust-num" style="font-size:1rem">+</span>
+      <span class="trust-label">Cases Handled</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-num">100</span><span class="trust-num" style="font-size:1rem">%</span>
+      <span class="trust-label">Confidential</span>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-2col">
+    <div>
+      <div class="section-top reveal">
+        <p class="eyebrow">About Me</p>
+        <h2 class="section-h2">Your Trusted Legal Partner</h2>
+        <div class="section-rule"></div>
+        <p class="body-p">I am Nancy Nathan, a practicing advocate specializing in International Law and Organization. With a client-first approach, I deliver clear, practical legal solutions that protect your rights and interests.</p>
+        <p class="body-p">My practice is built on trust, absolute confidentiality, and a genuine commitment to achieving the best outcomes — whether in the courtroom or at the consultation table.</p>
+      </div>
+    </div>
+    <div class="pillar-list reveal reveal-d1">
+      <div class="pillar-item open">
+        <div class="pillar-header" onclick="togglePillar(this)">
+          <div class="pillar-icon-wrap">⚖️</div>
+          <span class="pillar-title">Deep Legal Expertise</span>
+          <span class="pillar-arrow">▾</span>
+        </div>
+        <div class="pillar-body"><p>Specialized knowledge in International Law with years of multi-jurisdictional case experience and courtroom advocacy.</p></div>
+      </div>
+      <div class="pillar-item">
+        <div class="pillar-header" onclick="togglePillar(this)">
+          <div class="pillar-icon-wrap">🔒</div>
+          <span class="pillar-title">Absolute Confidentiality</span>
+          <span class="pillar-arrow">▾</span>
+        </div>
+        <div class="pillar-body"><p>Every case is treated with strict discretion. Your privacy and the integrity of your legal matter are always my top priority.</p></div>
+      </div>
+      <div class="pillar-item">
+        <div class="pillar-header" onclick="togglePillar(this)">
+          <div class="pillar-icon-wrap">💡</div>
+          <span class="pillar-title">Practical Solutions</span>
+          <span class="pillar-arrow">▾</span>
+        </div>
+        <div class="pillar-body"><p>No legal jargon — just clear, actionable advice and strategies designed to resolve your matter efficiently and effectively.</p></div>
+      </div>
+      <div class="pillar-item">
+        <div class="pillar-header" onclick="togglePillar(this)">
+          <div class="pillar-icon-wrap">🤝</div>
+          <span class="pillar-title">Client-First Always</span>
+          <span class="pillar-arrow">▾</span>
+        </div>
+        <div class="pillar-body"><p>Your goals drive my strategy. I listen carefully, advise honestly, and advocate relentlessly with your best interests at heart.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICE AREAS -->
+<section id="practice">
+  <div class="section-top reveal">
+    <p class="eyebrow">Expertise</p>
+    <h2 class="section-h2">Practice Areas</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="pa-scroll" id="paScroll">
+    <div class="pa-card">
+      <div class="pa-card-glow"></div>
+      <div class="pa-num">01</div>
+      <div class="pa-icon-wrap">⚖️</div>
+      <div class="pa-name">Civil Law</div>
+      <div class="pa-desc">Disputes, contracts, property matters, and civil litigation — handled with precision and care.</div>
+      <span class="pa-tag">Contracts · Property</span>
+    </div>
+    <div class="pa-card">
+      <div class="pa-card-glow"></div>
+      <div class="pa-num">02</div>
+      <div class="pa-icon-wrap">🏛️</div>
+      <div class="pa-name">Criminal Law</div>
+      <div class="pa-desc">Strong defense and unwavering representation in criminal matters at all court levels.</div>
+      <span class="pa-tag">Defense · Courts</span>
+    </div>
+    <div class="pa-card">
+      <div class="pa-card-glow"></div>
+      <div class="pa-num">03</div>
+      <div class="pa-icon-wrap">👨‍👩‍👧</div>
+      <div class="pa-name">Family Law</div>
+      <div class="pa-desc">Sensitive handling of divorce, custody, adoption, and all family-related legal matters.</div>
+      <span class="pa-tag">Divorce · Custody</span>
+    </div>
+    <div class="pa-card">
+      <div class="pa-card-glow"></div>
+      <div class="pa-num">04</div>
+      <div class="pa-icon-wrap">📋</div>
+      <div class="pa-name">Legal Consultation</div>
+      <div class="pa-desc">Clear, actionable legal advice tailored to your unique situation and specific needs.</div>
+      <span class="pa-tag">Advice · Strategy</span>
+    </div>
+  </div>
+  <div class="pa-dots" id="paDots">
+    <div class="pa-dot active"></div>
+    <div class="pa-dot"></div>
+    <div class="pa-dot"></div>
+    <div class="pa-dot"></div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE ME -->
+<section id="why">
+  <div class="section-top reveal">
+    <p class="eyebrow" style="color:var(--gold)">Why Choose Me</p>
+    <h2 class="section-h2" style="color:var(--white)">Committed to Your Case</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="why-grid">
+    <div class="why-card reveal">
+      <div class="why-icon">🎯</div>
+      <div class="why-title">Professional &amp; Experienced</div>
+      <div class="why-text">Years of courtroom experience with a proven track record across multiple legal fields.</div>
+    </div>
+    <div class="why-card reveal reveal-d1">
+      <div class="why-icon">🔒</div>
+      <div class="why-title">Strict Confidentiality</div>
+      <div class="why-text">Your case and privacy are handled with absolute discretion at every step.</div>
+    </div>
+    <div class="why-card reveal reveal-d2">
+      <div class="why-icon">💡</div>
+      <div class="why-title">Practical Outcomes</div>
+      <div class="why-text">Strategies focused on real results, not just legal theory — efficient and effective.</div>
+    </div>
+    <div class="why-card reveal reveal-d3">
+      <div class="why-icon">🤝</div>
+      <div class="why-title">Always Client-First</div>
+      <div class="why-text">Your goals are my priority. I listen, advise honestly, and advocate with heart.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section id="testimonial">
+  <div class="quote-mark">"</div>
+  <blockquote class="quote-text reveal">
+    "Nancy Nathan's guidance was a turning point. She explained everything clearly, fought for my case tirelessly, and the outcome exceeded my expectations."
+  </blockquote>
+  <div class="quote-author reveal reveal-d1">
+    <div class="quote-avatar">R</div>
+    <div>
+      <div class="quote-name">Rajesh M.</div>
+      <div class="quote-role">Civil Law Client</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-top reveal">
+    <p class="eyebrow">Get in Touch</p>
+    <h2 class="section-h2">Let's Talk About Your Case</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="contact-cards reveal">
+    <a href="tel:+91XXXXXXXXXX" class="cc">
+      <div class="cc-icon">📞</div>
+      <div>
+        <div class="cc-label">Phone</div>
+        <div class="cc-val">+91 XXXXX XXXXX</div>
+      </div>
+      <span class="cc-arrow">›</span>
+    </a>
+    <a href="mailto:nancynathan005@gmail.com" class="cc">
+      <div class="cc-icon">✉️</div>
+      <div>
+        <div class="cc-label">Email</div>
+        <div class="cc-val">nancynathan005@gmail.com</div>
+      </div>
+      <span class="cc-arrow">›</span>
+    </a>
+    <a href="https://www.linkedin.com/in/nancy-nathan-4397b9260" target="_blank" class="cc">
+      <div class="cc-icon">💼</div>
+      <div>
+        <div class="cc-label">LinkedIn</div>
+        <div class="cc-val">Nancy Nathan</div>
+      </div>
+      <span class="cc-arrow">›</span>
+    </a>
+    <a href="https://www.youtube.com/channel/UCtkzPdYs10mUFBvweqpQWmQ" target="_blank" class="cc">
+      <div class="cc-icon">📽️</div>
+      <div>
+        <div class="cc-label">YouTube</div>
+        <div class="cc-val">Watch Professional Legal Insights</div>
+      </div>
+      <span class="cc-arrow">›</span>
+    </a>
+    <a href="https://www.instagram.com/advocate.nancy_nathan/" target="_blank" class="cc">
+      <div class="cc-icon">📸</div>
+      <div>
+        <div class="cc-label">Instagram</div>
+        <div class="cc-val">Follow @advocate.nancy_nathan</div>
+      </div>
+      <span class="cc-arrow">›</span>
+    </a>
+  </div>
+  <div class="cta-final reveal reveal-d1">
+    <div class="cta-final-h">Ready to get started?</div>
+    <p class="cta-final-text">Book a free initial consultation. I'll listen to your situation and advise on the best legal path forward.</p>
+    <a href="mailto:nancynathan005@gmail.com" class="btn-primary">
+      📅 Book Free Consultation
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Nancy <span>Nathan</span></div>
+  <p class="footer-copy">&copy; 2026 · Advocate &amp; Legal Consultant · International Law &amp; Organization</p>
+</footer>
+
+<script>
+/* ── CURSOR ── */
+const cur=document.getElementById('cursor'),cf=document.getElementById('cursor-follow');
+let mx=0,my=0,fx=0,fy=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cur.style.transform=`translate(${mx}px,${my}px)`;
+});
+function animateCursor(){
+  fx+=(mx-fx)*.12;fy+=(my-fy)*.12;
+  cf.style.transform=`translate(${fx}px,${fy}px)`;
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+document.querySelectorAll('a,button,.pillar-header,.why-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    cf.style.width='50px';cf.style.height='50px';
+    cf.style.borderColor='rgba(200,164,86,.8)';
+  });
+  el.addEventListener('mouseleave',()=>{
+    cf.style.width='32px';cf.style.height='32px';
+    cf.style.borderColor='rgba(200,164,86,.5)';
+  });
+});
+
+/* ── HAMBURGER ── */
+const ham=document.getElementById('ham'),drawer=document.getElementById('drawer');
+function closeDrawer(){ham.classList.remove('open');drawer.classList.remove('open');document.body.style.overflow=''}
+ham.addEventListener('click',()=>{
+  const open=ham.classList.toggle('open');
+  drawer.classList.toggle('open',open);
+  document.body.style.overflow=open?'hidden':'';
+});
+
+/* ── DESKTOP NAV ── */
+const dlinks=document.getElementById('dlinks');
+function checkNav(){dlinks.style.display=window.innerWidth>=640?'flex':'none'}
+checkNav();window.addEventListener('resize',checkNav);
+
+/* ── PARTICLES ── */
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+let W,H,pts=[];
+function resizeCanvas(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight}
+resizeCanvas();window.addEventListener('resize',()=>{resizeCanvas();initPts()});
+function initPts(){
+  pts=Array.from({length:50},()=>({
+    x:Math.random()*W,y:Math.random()*H,
+    vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,
+    r:Math.random()*1.5+.5,
+    a:Math.random()
+  }));
+}
+initPts();
+function drawParticles(){
+  ctx.clearRect(0,0,W,H);
+  pts.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=W;if(p.x>W)p.x=0;
+    if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(200,164,86,${p.a*.35})`;ctx.fill();
+  });
+  // connect nearby
+  pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{
+    const dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<90){
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+      ctx.strokeStyle=`rgba(200,164,86,${.08*(1-d/90)})`;
+      ctx.lineWidth=.5;ctx.stroke();
+    }
+  }));
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+/* ── SCROLL REVEAL ── */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ── TRUST COUNTER ── */
+const counterObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    e.target.querySelectorAll('[data-count]').forEach(el=>{
+      const target=+el.dataset.count,dur=1600,step=16;
+      let current=0,elapsed=0;
+      const t=setInterval(()=>{
+        elapsed+=step;current=Math.min(Math.round(target*(elapsed/dur)),target);
+        el.textContent=current;if(current>=target)clearInterval(t);
+      },step);
+    });
+    counterObs.unobserve(e.target);
+  });
+},{threshold:.5});
+document.querySelectorAll('#trust').forEach(el=>counterObs.observe(el));
+
+/* ── PRACTICE SCROLL DOTS ── */
+const sc=document.getElementById('paScroll');
+const dots=document.querySelectorAll('.pa-dot');
+sc.addEventListener('scroll',()=>{
+  const idx=Math.round(sc.scrollLeft/(sc.scrollWidth/4));
+  dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+},{passive:true});
+
+/* ── ACCORDION ── */
+function togglePillar(header){
+  const item=header.parentElement;
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.pillar-item.open').forEach(i=>{
+    if(i!==item)i.classList.remove('open');
+  });
+  item.classList.toggle('open',!isOpen);
+}
+
+/* ── NAV HIDE ON SCROLL DOWN ── */
+let lastY=0;
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  document.querySelector('nav').style.transform=
+    (y>lastY&&y>120)?'translateY(-100%)':'translateY(0)';
+  lastY=y;
+},{passive:true});
+
+/* ── WHY CARD TOUCH RIPPLE ── */
+document.querySelectorAll('.why-card,.pa-card,.cc').forEach(card=>{
+  card.addEventListener('touchstart',function(e){
+    this.style.transform='scale(.97)';
+  },{passive:true});
+  card.addEventListener('touchend',function(){
+    this.style.transform='';
+  },{passive:true});
+});
+</script>
+</body>
+</html>
