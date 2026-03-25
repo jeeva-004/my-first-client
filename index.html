@@ -143,7 +143,7 @@ nav{
   opacity:0;animation:fadeUp .6s .52s forwards;
 }
 .hero-divider::before{content:'';flex:1;height:1px;background:linear-gradient(to right,var(--gold),transparent);max-width:60px}
-.hero-divider-text{font-size:.72rem;color:rgba(255,255,255,.3);letter-spacing:.1em}
+.hero-divider-text{font-size:.75rem;color:rgba(255,255,255,.6);letter-spacing:.15em;text-transform:uppercase;font-weight:500}
 .hero-desc{
   color:rgba(255,255,255,.7);font-size:1.05rem;line-height:1.75;
   opacity:0;animation:fadeUp .7s .6s forwards;
@@ -178,14 +178,18 @@ nav{
 .btn-secondary:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px)}
 
 .hero-socials{
-  display:flex;gap:1.5rem;margin-top:2.5rem;
+  display:flex;gap:1.2rem;margin-top:2.5rem;
   opacity:0;animation:fadeUp .7s .8s forwards;
 }
 .hero-socials a{
-  color:rgba(255,255,255,.5);font-size:1.2rem;transition:color .3s;
+  display:flex;align-items:center;justify-content:center;
+  width:40px;height:40px;border-radius:10px;
+  background:rgba(255,255,255,.05);border:1px solid var(--premium-border);
+  color:rgba(255,255,255,.6);transition:all .3s ease;
   text-decoration:none;
 }
-.hero-socials a:hover{color:var(--gold)}
+.hero-socials a:hover{background:var(--white);color:var(--premium-dark);transform:translateY(-3px)}
+.hero-socials svg{width:20px;height:20px;stroke-width:2px}
 /* floating scroll pill */
 .scroll-pill{
   position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
@@ -211,7 +215,9 @@ nav{
   max-width:1100px;margin:0 auto;
 }
 .trust-item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.5rem}
+.trust-num-wrap{display:flex;align-items:baseline;justify-content:center;gap:2px}
 .trust-num{font-family:'Cormorant',serif;font-size:2.8rem;font-weight:700;color:var(--white);line-height:1}
+.trust-sym{font-family:'Cormorant',serif;font-size:1.5rem;font-weight:700;color:var(--gold);line-height:1}
 .trust-label{font-size:.75rem;color:rgba(255,255,255,.5);letter-spacing:.12em;text-transform:uppercase;font-weight:500}
 
 /* ────────────── ABOUT ────────────── */
@@ -238,23 +244,23 @@ nav{
   background:linear-gradient(135deg,var(--gold),#b8903a);
   display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;
 }
-.pillar-title{font-size:.92rem;font-weight:600;color:var(--ink);flex:1}
+.pillar-title{font-size:.92rem;font-weight:600;color:var(--premium-dark);flex:1}
 .pillar-arrow{
-  font-size:.7rem;color:var(--muted);transition:transform .3s;
+  font-size:.7rem;color:var(--txt-light);transition:transform .3s;
   border:1px solid rgba(0,0,0,.1);border-radius:6px;
   width:24px;height:24px;display:flex;align-items:center;justify-content:center;
 }
-.pillar-item.open .pillar-arrow{transform:rotate(180deg);background:var(--goldl);border-color:var(--border);color:var(--gold)}
+.pillar-item.open .pillar-arrow{transform:rotate(180deg);background:rgba(200,164,86,.1);border-color:var(--gold);color:var(--gold)}
 .pillar-body{
   max-height:0;overflow:hidden;
   transition:max-height .35s cubic-bezier(.4,0,.2,1),padding .3s;
   padding:0 1.1rem;
 }
 .pillar-item.open .pillar-body{max-height:120px;padding:.2rem 1.1rem 1rem}
-.pillar-body p{font-size:.85rem;color:var(--muted);line-height:1.7}
+.pillar-body p{font-size:.85rem;color:var(--txt-light);line-height:1.7}
 
 /* ────────────── PRACTICE ────────────── */
-#practice{background:var(--cream);padding:4.5rem 1.4rem}
+#practice{background:var(--premium-gray);padding:7rem 1.4rem}
 .pa-scroll{
   display:flex;gap:1rem;overflow-x:auto;
   scroll-snap-type:x mandatory;
@@ -266,7 +272,7 @@ nav{
 .pa-card{
   flex:0 0 88vw;max-width:320px;
   scroll-snap-align:start;
-  background:var(--premium-dark);border-radius:12px;
+  background:var(--premium-blue);border-radius:12px;
   padding:2.5rem 2rem;position:relative;overflow:hidden;
   transition:all .3s ease;
   border:1px solid var(--premium-border);
@@ -305,8 +311,8 @@ nav{
 
 /* ────────────── WHY ────────────── */
 #why{
-  background:var(--deep);
-  padding:4.5rem 1.4rem;
+  background:var(--premium-dark);
+  padding:7rem 1.4rem;
   position:relative;overflow:hidden;
 }
 #why::before{
@@ -352,7 +358,7 @@ nav{
 .quote-text{
   font-family:'Cormorant',serif;font-size:clamp(1.3rem,5vw,1.7rem);
   font-style:italic;font-weight:600;
-  color:var(--ink);line-height:1.5;
+  color:var(--premium-dark);line-height:1.5;
   position:relative;z-index:1;padding-top:2rem;
 }
 .quote-author{margin-top:1.5rem;display:flex;align-items:center;gap:.9rem}
@@ -360,11 +366,11 @@ nav{
   width:42px;height:42px;border-radius:50%;
   background:linear-gradient(135deg,var(--gold),#b8903a);
   display:flex;align-items:center;justify-content:center;
-  font-family:'Cormorant',serif;font-size:1.1rem;font-weight:700;color:var(--ink);
+  font-family:'Cormorant',serif;font-size:1.1rem;font-weight:700;color:var(--white);
   flex-shrink:0;
 }
-.quote-name{font-size:.88rem;font-weight:600;color:var(--ink)}
-.quote-role{font-size:.75rem;color:var(--muted);margin-top:.1rem}
+.quote-name{font-size:.88rem;font-weight:600;color:var(--premium-dark)}
+.quote-role{font-size:.75rem;color:var(--txt-light);margin-top:.1rem}
 
 /* ────────────── CONTACT ────────────── */
 #contact{background:var(--premium-dark);padding:7rem 1.4rem}
@@ -416,9 +422,15 @@ footer{
 }
 .footer-logo span{color:var(--gold);font-style:italic}
 .footer-copy{font-size:.8rem;color:rgba(255,255,255,.4);letter-spacing:.04em}
-.footer-socials{display:flex;justify-content:center;gap:1.5rem;margin-bottom:2rem}
-.footer-socials a{color:rgba(255,255,255,.4);font-size:1.2rem;transition:color .3s}
-.footer-socials a:hover{color:var(--gold)}
+.footer-socials{display:flex;justify-content:center;gap:1rem;margin-bottom:2rem}
+.footer-socials a{
+  display:flex;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:8px;
+  background:var(--premium-blue);border:1px solid var(--premium-border);
+  color:rgba(255,255,255,.5);transition:all .3s ease;
+}
+.footer-socials a:hover{background:var(--white);color:var(--premium-dark);transform:translateY(-3px)}
+.footer-socials svg{width:18px;height:18px;stroke-width:2px}
 
 /* ────────────── SCROLL REVEAL ────────────── */
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .65s,transform .65s}
@@ -545,9 +557,15 @@ footer{
       </a>
     </div>
     <div class="hero-socials">
-      <a href="https://www.linkedin.com/in/nancy-nathan-4397b9260" target="_blank" aria-label="LinkedIn">LinkedIn</a>
-      <a href="https://www.youtube.com/channel/UCtkzPdYs10mUFBvweqpQWmQ" target="_blank" aria-label="YouTube">YouTube</a>
-      <a href="https://www.instagram.com/advocate.nancy_nathan/" target="_blank" aria-label="Instagram">Instagram</a>
+      <a href="https://www.linkedin.com/in/nancy-nathan-4397b9260" target="_blank" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+      </a>
+      <a href="https://www.youtube.com/channel/UCtkzPdYs10mUFBvweqpQWmQ" target="_blank" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+      </a>
+      <a href="https://www.instagram.com/advocate.nancy_nathan/" target="_blank" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      </a>
     </div>
   </div>
   <div class="scroll-pill">
@@ -560,15 +578,24 @@ footer{
 <div id="trust">
   <div class="trust-grid">
     <div class="trust-item">
-      <span class="trust-num" data-count="10">0</span><span class="trust-num" style="font-size:1rem">+</span>
+      <div class="trust-num-wrap">
+        <span class="trust-num" data-count="10">0</span>
+        <span class="trust-sym">+</span>
+      </div>
       <span class="trust-label">Yrs Experience</span>
     </div>
     <div class="trust-item">
-      <span class="trust-num" data-count="500">0</span><span class="trust-num" style="font-size:1rem">+</span>
+      <div class="trust-num-wrap">
+        <span class="trust-num" data-count="500">0</span>
+        <span class="trust-sym">+</span>
+      </div>
       <span class="trust-label">Cases Handled</span>
     </div>
     <div class="trust-item">
-      <span class="trust-num">100</span><span class="trust-num" style="font-size:1rem">%</span>
+      <div class="trust-num-wrap">
+        <span class="trust-num">100</span>
+        <span class="trust-sym">%</span>
+      </div>
       <span class="trust-label">Confidential</span>
     </div>
   </div>
@@ -761,9 +788,15 @@ footer{
   <div class="max-container">
     <div class="footer-logo">Nancy <span>Nathan</span></div>
     <div class="footer-socials">
-      <a href="https://www.linkedin.com/in/nancy-nathan-4397b9260" target="_blank">LinkedIn</a>
-      <a href="https://www.youtube.com/channel/UCtkzPdYs10mUFBvweqpQWmQ" target="_blank">YouTube</a>
-      <a href="https://www.instagram.com/advocate.nancy_nathan/" target="_blank">Instagram</a>
+      <a href="https://www.linkedin.com/in/nancy-nathan-4397b9260" target="_blank" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+      </a>
+      <a href="https://www.youtube.com/channel/UCtkzPdYs10mUFBvweqpQWmQ" target="_blank" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon></svg>
+      </a>
+      <a href="https://www.instagram.com/advocate.nancy_nathan/" target="_blank" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      </a>
     </div>
     <p class="footer-copy">&copy; 2026 · Nancy Nathan · Advocate &amp; Legal Consultant</p>
   </div>
